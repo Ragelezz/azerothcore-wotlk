@@ -15,10 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AvgDiffTracker.h"
+#include "MapUpdater.h"
 #include "LFGMgr.h"
 #include "Map.h"
-#include "MapUpdater.h"
 #include "Metric.h"
 
 class UpdateRequest
@@ -59,10 +58,7 @@ public:
 
     void call() override
     {
-        uint32 startTime = getMSTime();
         sLFGMgr->Update(m_diff, 1);
-        uint32 totalTime = getMSTimeDiff(startTime, getMSTime());
-        lfgDiffTracker.Update(totalTime);
         m_updater.update_finished();
     }
 private:
@@ -72,11 +68,6 @@ private:
 
 MapUpdater::MapUpdater(): pending_requests(0)
 {
-}
-
-MapUpdater::~MapUpdater()
-{
-    deactivate();
 }
 
 void MapUpdater::activate(size_t num_threads)

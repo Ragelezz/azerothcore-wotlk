@@ -16,11 +16,11 @@
  */
 
 #include "Utils.h"
-#include "WorldModelHandler.h"
 #include "Constants.h"
-#include <cstring>
 #include "G3D/Matrix4.h"
 #include "G3D/Quat.h"
+#include "WorldModelHandler.h"
+#include <cstring>
 
 #ifdef _WIN32
 #include "direct.h"
@@ -170,7 +170,7 @@ Vector3 Utils::GetLiquidVert(const IDefinition& def, Vector3 basePosition, float
 
 float Utils::Distance( float x, float y )
 {
-    return sqrt(x * x + y * y);
+    return std::sqrt(x * x + y * y);
 }
 
 std::string Utils::Replace( std::string str, const std::string& oldStr, const std::string& newStr )

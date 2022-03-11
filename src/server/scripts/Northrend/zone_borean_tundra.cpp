@@ -35,16 +35,15 @@ EndContentData */
 
 #include "PassiveAI.h"
 #include "Player.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedEscortAI.h"
 #include "ScriptedFollowerAI.h"
 #include "ScriptedGossip.h"
-#include "ScriptMgr.h"
 #include "SpellAuras.h"
 #include "SpellInfo.h"
 #include "SpellScript.h"
 #include "WorldSession.h"
-#include "ScriptedGossip.h"
 
 // Ours
 enum eDrakeHunt
@@ -133,7 +132,7 @@ public:
             casterGuid.Clear();
         }
 
-        void SpellHit(Unit* caster, const SpellInfo* spell) override
+        void SpellHit(Unit* caster, SpellInfo const* spell) override
         {
             if (phase || spell->Id != SPELL_SET_CART)
                 return;
@@ -552,7 +551,7 @@ struct npc_beryl_sorcererAI : public CreatureAI
             _events.ScheduleEvent(EVENT_FROSTBOLT, 3000, 4000);
         }
 
-        void SpellHit(Unit* unit, const SpellInfo* spell) override
+        void SpellHit(Unit* unit, SpellInfo const* spell) override
         {
             if (spell->Id == SPELL_ARCANE_CHAINS && !_chainsCast)
             {
@@ -775,7 +774,7 @@ public:
         {
         }
 
-        void SpellHit(Unit* unit, const SpellInfo* spell) override
+        void SpellHit(Unit* unit, SpellInfo const* spell) override
         {
             if (spell->Id == SPELL_NEURAL_NEEDLE && unit->GetTypeId() == TYPEID_PLAYER)
             {

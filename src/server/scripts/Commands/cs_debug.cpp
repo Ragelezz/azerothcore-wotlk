@@ -22,7 +22,6 @@
  Category: commandscripts
  EndScriptData */
 
-#include "ScriptMgr.h"
 #include "Bag.h"
 #include "BattlegroundMgr.h"
 #include "CellImpl.h"
@@ -34,8 +33,10 @@
 #include "Language.h"
 #include "Log.h"
 #include "MapMgr.h"
+#include "M2Stores.h"
 #include "ObjectMgr.h"
 #include "PoolMgr.h"
+#include "ScriptMgr.h"
 #include "SpellMgr.h"
 #include "Transport.h"
 #include "Warden.h"
@@ -56,7 +57,8 @@ public:
         {
             { "cinematic",      HandleDebugPlayCinematicCommand,       SEC_ADMINISTRATOR, Console::No },
             { "movie",          HandleDebugPlayMovieCommand,           SEC_ADMINISTRATOR, Console::No },
-            { "sound",          HandleDebugPlaySoundCommand,           SEC_ADMINISTRATOR, Console::No }
+            { "sound",          HandleDebugPlaySoundCommand,           SEC_ADMINISTRATOR, Console::No },
+            { "music",          HandleDebugPlayMusicCommand,           SEC_ADMINISTRATOR, Console::No }
         };
         static ChatCommandTable debugSendCommandTable =
         {
@@ -100,7 +102,8 @@ public:
             { "lfg",            HandleDebugDungeonFinderCommand,       SEC_ADMINISTRATOR, Console::No },
             { "los",            HandleDebugLoSCommand,                 SEC_ADMINISTRATOR, Console::No },
             { "moveflags",      HandleDebugMoveflagsCommand,           SEC_ADMINISTRATOR, Console::No },
-            { "unitstate",      HandleDebugUnitStateCommand,           SEC_ADMINISTRATOR, Console::No }
+            { "unitstate",      HandleDebugUnitStateCommand,           SEC_ADMINISTRATOR, Console::No },
+            { "dummy",          HandleDebugDummyCommand,               SEC_ADMINISTRATOR, Console::No }
         };
         static ChatCommandTable commandTable =
         {
@@ -113,7 +116,8 @@ public:
     // cinematicId - ID from CinematicSequences.dbc
     static bool HandleDebugPlayCinematicCommand(ChatHandler* handler, uint32 cinematicId)
     {
-        if (!sCinematicSequencesStore.LookupEntry(cinematicId))
+        CinematicSequencesEntry const* cineSeq = sCinematicSequencesStore.LookupEntry(cinematicId);
+        if (!cineSeq)
         {
             handler->PSendSysMessage(LANG_CINEMATIC_NOT_EXIST, cinematicId);
             handler->SetSentErrorMessage(true);
@@ -121,23 +125,19 @@ public:
         }
 
         // Dump camera locations
-        if (CinematicSequencesEntry const* cineSeq = sCinematicSequencesStore.LookupEntry(cinematicId))
+        if (std::vector<FlyByCamera> const* flyByCameras = GetFlyByCameras(cineSeq->cinematicCamera))
         {
-            auto const& itr = sFlyByCameraStore.find(cineSeq->cinematicCamera);
-            if (itr != sFlyByCameraStore.end())
+            handler->PSendSysMessage("Waypoints for sequence %u, camera %u", cinematicId, cineSeq->cinematicCamera);
+            uint32 count = 1;
+            for (FlyByCamera const& cam : *flyByCameras)
             {
-                handler->PSendSysMessage("Waypoints for sequence %u, camera %u", cinematicId, cineSeq->cinematicCamera);
-                uint32 count = 1;
-                for (FlyByCamera cam : itr->second)
-                {
-                    handler->PSendSysMessage("%02u - %7ums [%f, %f, %f] Facing %f (%f degrees)", count, cam.timeStamp, cam.locations.x, cam.locations.y, cam.locations.z, cam.locations.w, cam.locations.w * (180 / M_PI));
-                    count++;
-                }
-                handler->PSendSysMessage("%lu waypoints dumped", itr->second.size());
+                handler->PSendSysMessage("%02u - %7ums [%s (%f degrees)]", count, cam.timeStamp, cam.locations.ToString().c_str(), cam.locations.GetOrientation() * (180 / M_PI));
+                ++count;
             }
+            handler->PSendSysMessage("%u waypoints dumped", flyByCameras->size());
         }
 
-        handler->GetSession()->GetPlayer()->SendCinematicStart(cinematicId);
+        handler->GetPlayer()->SendCinematicStart(cinematicId);
         return true;
     }
 
@@ -184,7 +184,25 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendSpellFailCommand(ChatHandler* handler, uint8 result, Optional<uint32> failArg1, Optional<uint32> failArg2)
+    // musicId - ID from SoundEntries.dbc
+    static bool HandleDebugPlayMusicCommand(ChatHandler* handler, uint32 musicId)
+    {
+        if (!sSoundEntriesStore.LookupEntry(musicId))
+        {
+            handler->PSendSysMessage(LANG_SOUND_NOT_EXIST, musicId);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        Player* player = handler->GetPlayer();
+
+        player->PlayDirectMusic(musicId, player);
+
+        handler->PSendSysMessage(LANG_YOU_HEAR_SOUND, musicId);
+        return true;
+    }
+
+    static bool HandleDebugSendSpellFailCommand(ChatHandler* handler, SpellCastResult result, Optional<uint32> failArg1, Optional<uint32> failArg2)
     {
         WorldPacket data(SMSG_CAST_FAILED, 5);
         data << uint8(0);
@@ -205,19 +223,19 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendEquipErrorCommand(ChatHandler* handler, uint16 error)
+    static bool HandleDebugSendEquipErrorCommand(ChatHandler* handler, InventoryResult error)
     {
         handler->GetPlayer()->SendEquipError(InventoryResult(error), nullptr, nullptr);
         return true;
     }
 
-    static bool HandleDebugSendSellErrorCommand(ChatHandler* handler, uint32 error)
+    static bool HandleDebugSendSellErrorCommand(ChatHandler* handler, SellResult error)
     {
         handler->GetPlayer()->SendSellError(SellResult(error), nullptr, ObjectGuid::Empty, 0);
         return true;
     }
 
-    static bool HandleDebugSendBuyErrorCommand(ChatHandler* handler, uint16 error)
+    static bool HandleDebugSendBuyErrorCommand(ChatHandler* handler, BuyResult error)
     {
         handler->GetPlayer()->SendBuyError(BuyResult(error), nullptr, 0, 0);
         return true;
@@ -398,7 +416,7 @@ public:
             }
             else
             {
-                LOG_ERROR("network.opcode", "Sending opcode that has unknown type '%s'", type.c_str());
+                LOG_ERROR("network.opcode", "Sending opcode that has unknown type '{}'", type);
                 break;
             }
         }
@@ -432,7 +450,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendChannelNotifyCommand(ChatHandler* handler, uint8 type)
+    static bool HandleDebugSendChannelNotifyCommand(ChatHandler* handler, ChatNotify type)
     {
         WorldPacket data(SMSG_CHANNEL_NOTIFY, (1 + 10));
         data << type;
@@ -443,15 +461,15 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendChatMsgCommand(ChatHandler* handler, uint8 type)
+    static bool HandleDebugSendChatMsgCommand(ChatHandler* handler, ChatMsg type)
     {
         WorldPacket data;
-        ChatHandler::BuildChatPacket(data, ChatMsg(type), LANG_UNIVERSAL, handler->GetPlayer(), handler->GetPlayer(), "testtest", 0, "chan");
+        ChatHandler::BuildChatPacket(data, type, LANG_UNIVERSAL, handler->GetPlayer(), handler->GetPlayer(), "testtest", 0, "chan");
         handler->GetSession()->SendPacket(&data);
         return true;
     }
 
-    static bool HandleDebugSendQuestPartyMsgCommand(ChatHandler* handler, uint32 msg)
+    static bool HandleDebugSendQuestPartyMsgCommand(ChatHandler* handler, QuestShareMessages msg)
     {
         handler->GetPlayer()->SendPushToPartyResponse(handler->GetPlayer(), msg);
         return true;
@@ -469,7 +487,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendQuestInvalidMsgCommand(ChatHandler* handler, uint32 msg)
+    static bool HandleDebugSendQuestInvalidMsgCommand(ChatHandler* handler, QuestFailedReason msg)
     {
         handler->GetPlayer()->SendCanTakeQuestResponse(msg);
         return true;
@@ -965,12 +983,12 @@ public:
     }
 
     // Play emote animation
-    static bool HandleDebugAnimCommand(ChatHandler* handler, uint32 emote)
+    static bool HandleDebugAnimCommand(ChatHandler* handler, Emote emote)
     {
         if (Unit* unit = handler->getSelectedUnit())
             unit->HandleEmoteCommand(emote);
 
-        handler->PSendSysMessage("Playing emote %s", emote);
+        handler->PSendSysMessage("Playing emote %s", EnumUtils::ToConstant(emote));
 
         return true;
     }
@@ -990,7 +1008,7 @@ public:
         return false;
     }
 
-    static bool HandleDebugSetAuraStateCommand(ChatHandler* handler, int32 state)
+    static bool HandleDebugSetAuraStateCommand(ChatHandler* handler, Optional<AuraStateType> state, bool apply)
     {
         Unit* unit = handler->getSelectedUnit();
         if (!unit)
@@ -1003,12 +1021,12 @@ public:
         if (!state)
         {
             // reset all states
-            for (int i = 1; i <= 32; ++i)
-                unit->ModifyAuraState(AuraStateType(i), false);
+            for (AuraStateType s : EnumUtils::Iterate<AuraStateType>())
+                unit->ModifyAuraState(s, false);
             return true;
         }
 
-        unit->ModifyAuraState(AuraStateType(abs(state)), state > 0);
+        unit->ModifyAuraState(*state, apply);
         return true;
     }
 
@@ -1220,9 +1238,15 @@ public:
     {
         Player* player = handler->GetSession()->GetPlayer();
 
-        LOG_INFO("sql.dev", "(@PATH, XX, %.3f, %.3f, %.5f, 0,0, 0,100, 0),", player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+        LOG_INFO("sql.dev", "(@PATH, XX, {0:.3f}, {0:.3f}, {0:.5f}, 0,0, 0,100, 0),", player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
 
         handler->PSendSysMessage("Waypoint SQL written to SQL Developer log");
+        return true;
+    }
+
+    static bool HandleDebugDummyCommand(ChatHandler* handler)
+    {
+        handler->SendSysMessage("This command does nothing right now. Edit your local core (cs_debug.cpp) to make it do whatever you need for testing.");
         return true;
     }
 };

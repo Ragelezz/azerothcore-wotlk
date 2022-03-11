@@ -31,10 +31,10 @@ EndContentData */
 
 #include "GameObjectAI.h"
 #include "Player.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedEscortAI.h"
 #include "ScriptedGossip.h"
-#include "ScriptMgr.h"
 #include "SpellInfo.h"
 
 /*  ###################################
@@ -1728,7 +1728,7 @@ public:
                 PlayerGUID = who->GetGUID();
         }
 
-        //void SpellHit(Unit* /*caster*/, const SpellInfo* /*spell*/)
+        //void SpellHit(Unit* /*caster*/, SpellInfo const* /*spell*/)
         //{
         //    DoCast(me, SPELL_DE_MATERIALIZE);
         //}

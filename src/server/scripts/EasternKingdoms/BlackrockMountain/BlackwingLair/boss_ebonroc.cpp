@@ -15,9 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "blackwing_lair.h"
-#include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "blackwing_lair.h"
 
 enum Spells
 {
@@ -41,6 +41,21 @@ public:
     struct boss_ebonrocAI : public BossAI
     {
         boss_ebonrocAI(Creature* creature) : BossAI(creature, DATA_EBONROC) { }
+
+        void MovementInform(uint32 type, uint32 id) override
+        {
+            if (type != WAYPOINT_MOTION_TYPE || id != 12)
+            {
+                return;
+            }
+
+            me->GetMotionMaster()->MoveRandom(10.f);
+
+            me->m_Events.AddEventAtOffset([this]()
+            {
+                me->GetMotionMaster()->Initialize();
+            }, 15s);
+        }
 
         void EnterCombat(Unit* who) override
         {

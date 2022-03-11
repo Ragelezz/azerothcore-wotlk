@@ -17,9 +17,9 @@
 
 #ifndef DBC_H
 #define DBC_H
-#include <vector>
-#include <string>
 #include "Define.h"
+#include <string>
+#include <vector>
 
 class Record;
 
@@ -61,7 +61,7 @@ public:
         return *(T*)(&Values[index]);
     }
 
-    std::string GetString(int index)
+    std::string Get<std::string>(int index)
     {
         return Source->GetStringByOffset(Values[index]);
     }

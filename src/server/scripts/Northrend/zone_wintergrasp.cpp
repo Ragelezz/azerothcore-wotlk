@@ -21,12 +21,13 @@
 #include "CombatAI.h"
 #include "GameGraveyard.h"
 #include "GameObjectAI.h"
+#include "GameTime.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "PoolMgr.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
-#include "ScriptMgr.h"
 #include "SpellScript.h"
 #include "Vehicle.h"
 #include "World.h"
@@ -294,7 +295,7 @@ public:
         else
         {
             uint32 timer = wintergrasp->GetTimer() / 1000;
-            player->SendUpdateWorldState(4354, time(nullptr) + timer);
+            player->SendUpdateWorldState(4354, GameTime::GetGameTime().count() + timer);
             if (timer < 15 * MINUTE)
             {
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Queue for Wintergrasp.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
@@ -755,8 +756,8 @@ public:
 
         bool IsFriendly(Unit* passenger)
         {
-            return ((go->GetUInt32Value(GAMEOBJECT_FACTION) == WintergraspFaction[TEAM_HORDE] && passenger->getRaceMask() & RACEMASK_HORDE) ||
-                    (go->GetUInt32Value(GAMEOBJECT_FACTION) == WintergraspFaction[TEAM_ALLIANCE] && passenger->getRaceMask() & RACEMASK_ALLIANCE));
+            return ((me->GetUInt32Value(GAMEOBJECT_FACTION) == WintergraspFaction[TEAM_HORDE] && passenger->getRaceMask() & RACEMASK_HORDE) ||
+                    (me->GetUInt32Value(GAMEOBJECT_FACTION) == WintergraspFaction[TEAM_ALLIANCE] && passenger->getRaceMask() & RACEMASK_ALLIANCE));
         }
 
         Creature* IsValidVehicle(Creature* cVeh)
@@ -765,7 +766,7 @@ public:
                 if (Vehicle* vehicle = cVeh->GetVehicleKit())
                     if (Unit* passenger = vehicle->GetPassenger(0))
                         if (IsFriendly(passenger))
-                            if (Creature* teleportTrigger = passenger->SummonTrigger(go->GetPositionX() - 60.0f, go->GetPositionY(), go->GetPositionZ() + 1.0f, cVeh->GetOrientation(), 1000))
+                            if (Creature* teleportTrigger = passenger->SummonTrigger(me->GetPositionX() - 60.0f, me->GetPositionY(), me->GetPositionZ() + 1.0f, cVeh->GetOrientation(), 1000))
                                 return teleportTrigger;
 
             return nullptr;
@@ -777,7 +778,7 @@ public:
             if (_checkTimer >= 1000)
             {
                 for (uint8 i = 0; i < MAX_WINTERGRASP_VEHICLES; i++)
-                    if (Creature* vehicleCreature = go->FindNearestCreature(vehiclesList[i], 3.0f, true))
+                    if (Creature* vehicleCreature = me->FindNearestCreature(vehiclesList[i], 3.0f, true))
                         if (Creature* teleportTrigger = IsValidVehicle(vehicleCreature))
                             teleportTrigger->CastSpell(vehicleCreature, SPELL_VEHICLE_TELEPORT, true);
 
@@ -856,16 +857,30 @@ public:
         {
             PreventHitEffect(effIndex);
 
-            uint32 entry = GetSpellInfo()->Effects[effIndex].MiscValue;
-            SummonPropertiesEntry const* properties = sSummonPropertiesStore.LookupEntry(GetSpellInfo()->Effects[effIndex].MiscValueB);
-            int32 duration = GetSpellInfo()->GetDuration();
-            if (!GetOriginalCaster() || !properties)
-                return;
-
-            if (TempSummon* summon = GetCaster()->GetMap()->SummonCreature(entry, *GetHitDest(), properties, duration, GetOriginalCaster(), GetSpellInfo()->Id))
+            if (Unit* caster = GetCaster())
             {
-                summon->SetCreatorGUID(GetOriginalCaster()->GetGUID());
-                summon->HandleSpellClick(GetCaster());
+                Unit* originalCaster = GetOriginalCaster();
+                if (!originalCaster)
+                {
+                    return;
+                }
+
+                SummonPropertiesEntry const* properties = sSummonPropertiesStore.LookupEntry(GetSpellInfo()->Effects[effIndex].MiscValueB);
+                if (!properties)
+                {
+                    return;
+                }
+
+                uint32 entry = GetSpellInfo()->Effects[effIndex].MiscValue;
+                int32 duration = GetSpellInfo()->GetDuration();
+                if (TempSummon* summon = caster->GetMap()->SummonCreature(entry, *GetHitDest(), properties, duration, originalCaster, GetSpellInfo()->Id))
+                {
+                    if (summon->IsInMap(caster))
+                    {
+                        summon->SetCreatorGUID(originalCaster->GetGUID());
+                        summon->HandleSpellClick(caster);
+                    }
+                }
             }
         }
 

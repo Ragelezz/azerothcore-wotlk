@@ -15,13 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "npc_stave_of_ancients.h"
 #include "CreatureGroups.h"
+#include "GameTime.h"
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "Spell.h"
-#include "npc_stave_of_ancients.h"
 
 uint32 NPCStaveQuestAI::GetFormEntry(std::string type)
 {
@@ -140,8 +141,7 @@ bool NPCStaveQuestAI::ValidThreatlist()
 
 void NPCStaveQuestAI::SetHomePosition()
 {
-    Position homePosition;
-    me->GetPosition(&homePosition);
+    Position homePosition = me->GetPosition();
 
     if (homePosition.IsPositionValid())
     {
@@ -393,7 +393,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit* /*Caster*/, const SpellInfo* Spell) override
+        void SpellHit(Unit* /*Caster*/, SpellInfo const* Spell) override
         {
             uint32 serpentStings[12] = { 1978, 13549, 13550, 13551, 13552, 13553, 13554, 13555, 25295, 27016, 49000, 49001 };
 
@@ -564,8 +564,7 @@ public:
 
         void RespawnPet()
         {
-            Position current;
-            me->GetNearPosition(current, -5.0f, 0.0f);
+            Position current = me->GetNearPosition(-5.0f, 0.0f);
             Precious()->RemoveCorpse(false, false);
             Precious()->SetPosition(current);
             Precious()->SetHomePosition(current);
@@ -604,13 +603,12 @@ public:
             if (Precious()->isDead())
             {
                 // Make it so that Precious respawns after Simone
-                uint32 respawnTime = me->GetRespawnTime() - time(nullptr);
+                uint32 respawnTime = me->GetRespawnTime() - GameTime::GetGameTime().count();
                 Precious()->SetRespawnTime(respawnTime);
                 return;
             }
 
-            Position petResetPos;
-            me->GetNearPosition(petResetPos, -5.0f, 0.0f);
+            Position petResetPos = me->GetNearPosition(-5.0f, 0.0f);
 
             if (petResetPos.IsPositionValid())
             {
@@ -776,7 +774,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit* /*Caster*/, const SpellInfo* Spell) override
+        void SpellHit(Unit* /*Caster*/, SpellInfo const* Spell) override
         {
             if (!InNormalForm())
             {
@@ -986,7 +984,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit* /*Caster*/, const SpellInfo* Spell) override
+        void SpellHit(Unit* /*Caster*/, SpellInfo const* Spell) override
         {
             if (InNormalForm())
             {
@@ -1157,7 +1155,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit* /*Caster*/, const SpellInfo* Spell) override
+        void SpellHit(Unit* /*Caster*/, SpellInfo const* Spell) override
         {
             if (InNormalForm())
             {

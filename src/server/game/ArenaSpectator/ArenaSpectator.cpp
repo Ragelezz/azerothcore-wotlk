@@ -23,6 +23,7 @@
 #include "Player.h"
 #include "SpellAuraEffects.h"
 #include "SpellAuras.h"
+#include "Types.h"
 #include "World.h"
 
 bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::string const& name)
@@ -301,7 +302,7 @@ bool ArenaSpectator::ShouldSendAura(Aura* aura, uint8 effMask, ObjectGuid target
 }
 
 template<>
-AC_GAME_API void ArenaSpectator::SendPacketTo(const Player* player, std::string&& message)
+AC_GAME_API void ArenaSpectator::SendPacketTo(Player const* player, std::string&& message)
 {
     WorldPacket data;
     CreatePacket(data, message);
