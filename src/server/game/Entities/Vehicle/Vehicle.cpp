@@ -109,8 +109,10 @@ void Vehicle::Uninstall()
     LOG_DEBUG("vehicles", "Vehicle::Uninstall {}", _me->GetGUID().ToString());
     RemoveAllPassengers();
 
-    if (GetBase()->GetTypeId() == TYPEID_UNIT)
+    if (_me && _me->GetTypeId() == TYPEID_UNIT)
+    {
         sScriptMgr->OnUninstall(this);
+    }
 }
 
 void Vehicle::Reset(bool evading /*= false*/)
@@ -119,14 +121,14 @@ void Vehicle::Reset(bool evading /*= false*/)
     if (_me->GetTypeId() == TYPEID_PLAYER)
     {
         if (_usableSeatNum)
-            _me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_PLAYER_VEHICLE);
+            _me->SetNpcFlag(UNIT_NPC_FLAG_PLAYER_VEHICLE);
     }
     else
     {
         ApplyAllImmunities();
         InstallAllAccessories(evading);
         if (_usableSeatNum)
-            _me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+            _me->SetNpcFlag(UNIT_NPC_FLAG_SPELLCLICK);
     }
 
     if (GetBase()->GetTypeId() == TYPEID_UNIT)
@@ -342,11 +344,14 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         ASSERT(seat->second.IsEmpty());
     }
 
+    if (!seat->second.SeatInfo)
+        return false;
+
     LOG_DEBUG("vehicles", "Unit {} enter vehicle entry {} id {} ({}) seat {}",
         unit->GetName(), _me->GetEntry(), _vehicleInfo->m_ID, _me->GetGUID().ToString(), (int32)seat->first);
 
     seat->second.Passenger.Guid = unit->GetGUID();
-    seat->second.Passenger.IsUnselectable = unit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+    seat->second.Passenger.IsUnselectable = unit->HasUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
 
     if (seat->second.SeatInfo->CanEnterOrExit())
     {
@@ -355,9 +360,9 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         if (!_usableSeatNum)
         {
             if (_me->GetTypeId() == TYPEID_PLAYER)
-                _me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_PLAYER_VEHICLE);
+                _me->RemoveNpcFlag(UNIT_NPC_FLAG_PLAYER_VEHICLE);
             else
-                _me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+                _me->RemoveNpcFlag(UNIT_NPC_FLAG_SPELLCLICK);
         }
     }
 
@@ -369,7 +374,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         unit->ToPlayer()->UnsummonPetTemporaryIfAny();
 
     if (seat->second.SeatInfo->m_flags & VEHICLE_SEAT_FLAG_PASSENGER_NOT_SELECTABLE)
-        unit->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        unit->SetUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
 
     unit->AddUnitMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
     VehicleSeatEntry const* veSeat = seat->second.SeatInfo;
@@ -460,11 +465,11 @@ void Vehicle::RemovePassenger(Unit* unit)
         unit->GetName(), _me->GetEntry(), _vehicleInfo->m_ID, _me->GetGUID().ToString(), (int32)seat->first);
 
     if (seat->second.SeatInfo->CanEnterOrExit() && ++_usableSeatNum)
-        _me->SetFlag(UNIT_NPC_FLAGS, (_me->GetTypeId() == TYPEID_PLAYER ? UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK));
+        _me->SetNpcFlag((_me->GetTypeId() == TYPEID_PLAYER ? UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK));
 
     // Remove UNIT_FLAG_NOT_SELECTABLE if passenger did not have it before entering vehicle
     if (seat->second.SeatInfo->m_flags & VEHICLE_SEAT_FLAG_PASSENGER_NOT_SELECTABLE && !seat->second.Passenger.IsUnselectable)
-        unit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        unit->RemoveUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
 
     seat->second.Passenger.Reset();
 
@@ -486,10 +491,11 @@ void Vehicle::RemovePassenger(Unit* unit)
     if (_me->IsFlying() && !_me->GetInstanceId() && unit->GetTypeId() == TYPEID_PLAYER && !(unit->ToPlayer()->GetDelayedOperations() & DELAYED_VEHICLE_TELEPORT) && _me->GetEntry() != 30275 /*NPC_WILD_WYRM*/)
         _me->CastSpell(unit, VEHICLE_SPELL_PARACHUTE, true);
 
-    if (_me->GetTypeId() == TYPEID_UNIT && _me->ToCreature()->IsAIEnabled)
+    bool isCreature = _me->GetTypeId() == TYPEID_UNIT;
+    if (isCreature && _me->ToCreature()->IsAIEnabled)
         _me->ToCreature()->AI()->PassengerBoarded(unit, seat->first, false);
 
-    if (GetBase()->GetTypeId() == TYPEID_UNIT)
+    if (isCreature)
         sScriptMgr->OnRemovePassenger(this, unit);
 }
 

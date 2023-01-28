@@ -377,6 +377,7 @@ public:
     std::array<uint32, 2> SpellVisual;
     uint32 SpellIconID;
     uint32 ActiveIconID;
+    uint32 SpellPriority;
     std::array<char const*, 16> SpellName;
     std::array<char const*, 16> Rank;
     uint32 MaxTargetLevel;
@@ -456,7 +457,7 @@ public:
     bool IsPositive() const;
     bool IsPositiveEffect(uint8 effIndex) const;
     bool IsChanneled() const;
-    [[nodiscard]] bool IsMoveAllowedChannel() const;
+    [[nodiscard]] bool IsActionAllowedChannel() const;
     bool NeedsComboPoints() const;
     bool IsBreakingStealth() const;
     bool IsRangedWeaponSpell() const;

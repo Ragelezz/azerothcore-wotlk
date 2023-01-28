@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,21 +12,21 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.creature_movement_override
+-- Dumpar struktur för tabell acore_world.creature_movement_override
 DROP TABLE IF EXISTS `creature_movement_override`;
 CREATE TABLE IF NOT EXISTS `creature_movement_override` (
-  `SpawnId` INT unsigned NOT NULL DEFAULT 0,
-  `Ground` TINYINT unsigned DEFAULT NULL,
-  `Swim` TINYINT unsigned DEFAULT NULL,
-  `Flight` TINYINT unsigned DEFAULT NULL,
-  `Rooted` TINYINT unsigned DEFAULT NULL,
-  `Chase` TINYINT unsigned DEFAULT NULL,
-  `Random` TINYINT unsigned DEFAULT NULL,
-  `InteractionPauseTimer` INT unsigned DEFAULT NULL COMMENT 'Time (in milliseconds) during which creature will not move after interaction with player',
+  `SpawnId` int unsigned NOT NULL DEFAULT '0',
+  `Ground` tinyint unsigned DEFAULT NULL,
+  `Swim` tinyint unsigned DEFAULT NULL,
+  `Flight` tinyint unsigned DEFAULT NULL,
+  `Rooted` tinyint unsigned DEFAULT NULL,
+  `Chase` tinyint unsigned DEFAULT NULL,
+  `Random` tinyint unsigned DEFAULT NULL,
+  `InteractionPauseTimer` int unsigned DEFAULT NULL COMMENT 'Time (in milliseconds) during which creature will not move after interaction with player',
   PRIMARY KEY (`SpawnId`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.creature_movement_override: 11 rows
+-- Dumpar data för tabell acore_world.creature_movement_override: 11 rows
 DELETE FROM `creature_movement_override`;
 /*!40000 ALTER TABLE `creature_movement_override` DISABLE KEYS */;
 INSERT INTO `creature_movement_override` (`SpawnId`, `Ground`, `Swim`, `Flight`, `Rooted`, `Chase`, `Random`, `InteractionPauseTimer`) VALUES

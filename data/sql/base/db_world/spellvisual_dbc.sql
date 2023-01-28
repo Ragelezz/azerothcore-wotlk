@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,45 +12,45 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.spellvisual_dbc
+-- Dumpar struktur för tabell acore_world.spellvisual_dbc
 DROP TABLE IF EXISTS `spellvisual_dbc`;
 CREATE TABLE IF NOT EXISTS `spellvisual_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `PrecastKit` INT NOT NULL DEFAULT 0,
-  `CastKit` INT NOT NULL DEFAULT 0,
-  `ImpactKit` INT NOT NULL DEFAULT 0,
-  `StateKit` INT NOT NULL DEFAULT 0,
-  `StateDoneKit` INT NOT NULL DEFAULT 0,
-  `ChannelKit` INT NOT NULL DEFAULT 0,
-  `HasMissile` INT NOT NULL DEFAULT 0,
-  `MissileModel` INT NOT NULL DEFAULT 0,
-  `MissilePathType` INT NOT NULL DEFAULT 0,
-  `MissileDestinationAttachment` INT NOT NULL DEFAULT 0,
-  `MissileSound` INT NOT NULL DEFAULT 0,
-  `AnimEventSoundID` INT NOT NULL DEFAULT 0,
-  `Flags` INT NOT NULL DEFAULT 0,
-  `CasterImpactKit` INT NOT NULL DEFAULT 0,
-  `TargetImpactKit` INT NOT NULL DEFAULT 0,
-  `MissileAttachment` INT NOT NULL DEFAULT 0,
-  `MissileFollowGroundHeight` INT NOT NULL DEFAULT 0,
-  `MissileFollowGroundDropSpeed` INT NOT NULL DEFAULT 0,
-  `MissileFollowGroundApproach` INT NOT NULL DEFAULT 0,
-  `MissileFollowGroundFlags` INT NOT NULL DEFAULT 0,
-  `MissileMotion` INT NOT NULL DEFAULT 0,
-  `MissileTargetingKit` INT NOT NULL DEFAULT 0,
-  `InstantAreaKit` INT NOT NULL DEFAULT 0,
-  `ImpactAreaKit` INT NOT NULL DEFAULT 0,
-  `PersistentAreaKit` INT NOT NULL DEFAULT 0,
-  `MissileCastOffsetX` float NOT NULL DEFAULT 0,
-  `MissileCastOffsetY` float NOT NULL DEFAULT 0,
-  `MissileCastOffsetZ` float NOT NULL DEFAULT 0,
-  `MissileImpactOffsetX` float NOT NULL DEFAULT 0,
-  `MissileImpactOffsetY` float NOT NULL DEFAULT 0,
-  `MissileImpactOffsetZ` float NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `PrecastKit` int NOT NULL DEFAULT '0',
+  `CastKit` int NOT NULL DEFAULT '0',
+  `ImpactKit` int NOT NULL DEFAULT '0',
+  `StateKit` int NOT NULL DEFAULT '0',
+  `StateDoneKit` int NOT NULL DEFAULT '0',
+  `ChannelKit` int NOT NULL DEFAULT '0',
+  `HasMissile` int NOT NULL DEFAULT '0',
+  `MissileModel` int NOT NULL DEFAULT '0',
+  `MissilePathType` int NOT NULL DEFAULT '0',
+  `MissileDestinationAttachment` int NOT NULL DEFAULT '0',
+  `MissileSound` int NOT NULL DEFAULT '0',
+  `AnimEventSoundID` int NOT NULL DEFAULT '0',
+  `Flags` int NOT NULL DEFAULT '0',
+  `CasterImpactKit` int NOT NULL DEFAULT '0',
+  `TargetImpactKit` int NOT NULL DEFAULT '0',
+  `MissileAttachment` int NOT NULL DEFAULT '0',
+  `MissileFollowGroundHeight` int NOT NULL DEFAULT '0',
+  `MissileFollowGroundDropSpeed` int NOT NULL DEFAULT '0',
+  `MissileFollowGroundApproach` int NOT NULL DEFAULT '0',
+  `MissileFollowGroundFlags` int NOT NULL DEFAULT '0',
+  `MissileMotion` int NOT NULL DEFAULT '0',
+  `MissileTargetingKit` int NOT NULL DEFAULT '0',
+  `InstantAreaKit` int NOT NULL DEFAULT '0',
+  `ImpactAreaKit` int NOT NULL DEFAULT '0',
+  `PersistentAreaKit` int NOT NULL DEFAULT '0',
+  `MissileCastOffsetX` float NOT NULL DEFAULT '0',
+  `MissileCastOffsetY` float NOT NULL DEFAULT '0',
+  `MissileCastOffsetZ` float NOT NULL DEFAULT '0',
+  `MissileImpactOffsetX` float NOT NULL DEFAULT '0',
+  `MissileImpactOffsetY` float NOT NULL DEFAULT '0',
+  `MissileImpactOffsetZ` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.spellvisual_dbc: 0 rows
+-- Dumpar data för tabell acore_world.spellvisual_dbc: 0 rows
 DELETE FROM `spellvisual_dbc`;
 /*!40000 ALTER TABLE `spellvisual_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `spellvisual_dbc` ENABLE KEYS */;

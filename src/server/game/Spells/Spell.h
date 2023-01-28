@@ -544,8 +544,6 @@ public:
 
     UsedSpellMods m_appliedMods;
 
-    PathGenerator* m_pathFinder; // pussywizard: for precomputing path for charge
-
     int32 GetCastTime() const { return m_casttime; }
     bool IsAutoRepeat() const { return m_autoRepeat; }
     void SetAutoRepeat(bool rep) { m_autoRepeat = rep; }
@@ -589,6 +587,10 @@ public:
 
     [[nodiscard]] uint32 GetTriggeredByAuraTickNumber() const { return m_triggeredByAuraSpell.tickNumber; }
 
+    [[nodiscard]] TriggerCastFlags GetTriggeredCastFlags() const { return _triggeredCastFlags; }
+
+    [[nodiscard]] SpellSchoolMask GetSpellSchoolMask() const { return m_spellSchoolMask; }
+
  protected:
     bool HasGlobalCooldown() const;
     void TriggerGlobalCooldown();
@@ -605,6 +607,8 @@ public:
     Unit* m_originalCaster;                             // cached pointer for m_originalCaster, updated at Spell::UpdatePointers()
 
     Spell** m_selfContainer;                            // pointer to our spell container (if applicable)
+
+    std::string GetDebugInfo() const;
 
     //Spell data
     SpellSchoolMask m_spellSchoolMask;                  // Spell school (can be overwrite for some spells (wand shoot for example)
@@ -708,7 +712,7 @@ public:
     bool UpdateChanneledTargetList();
     bool IsValidDeadOrAliveTarget(Unit const* target) const;
     void HandleLaunchPhase();
-    void DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier, bool firstTarget);
+    void DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier);
 
     void PrepareTargetProcessing();
     void FinishTargetProcessing();
@@ -739,7 +743,7 @@ public:
     {
         SpellInfo const* triggeredSpell;
         SpellInfo const* triggeredByAura;
-        // uint8 triggeredByEffIdx          This might be needed at a later stage - No need known for now
+        uint8 triggeredByEffIdx;
         int32 chance;
     };
 
@@ -749,7 +753,7 @@ public:
     HitTriggerSpellList m_hitTriggerSpells;
 
     // effect helpers
-    void SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* properties, uint32 numSummons);
+    void SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* properties, uint32 numSummons, bool personalSpawn);
     void CalculateJumpSpeeds(uint8 i, float dist, float& speedxy, float& speedz);
 
     SpellCastResult CanOpenLock(uint32 effIndex, uint32 lockid, SkillType& skillid, int32& reqSkillValue, int32& skillValue);
@@ -768,6 +772,7 @@ public:
 
     bool m_skipCheck;
     uint8 m_auraScaleMask;
+    std::unique_ptr<PathGenerator> m_preGeneratedPath;
 
     // xinef:
     bool _spellTargetsSelected;

@@ -83,10 +83,10 @@ class boss_anub_arak : public CreatureScript
 
             bool intro;
 
-            void EnterEvadeMode() override
+            void EnterEvadeMode(EvadeReason why) override
             {
                 me->DisableRotate(false);
-                BossAI::EnterEvadeMode();
+                BossAI::EnterEvadeMode(why);
             }
 
             void MoveInLineOfSight(Unit* who) override
@@ -124,7 +124,7 @@ class boss_anub_arak : public CreatureScript
             void Reset() override
             {
                 BossAI::Reset();
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
+                me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
                 instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
             }
 
@@ -194,7 +194,7 @@ class boss_anub_arak : public CreatureScript
                             Talk(SAY_SUBMERGE);
                             me->CastSpell(me, SPELL_IMPALE_PERIODIC, true);
                             me->CastSpell(me, SPELL_SUBMERGE, false);
-                            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
+                            me->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
 
                             events.DelayEvents(46000, 0);
                             events.ScheduleEvent(EVENT_EMERGE, 45000);
@@ -212,7 +212,7 @@ class boss_anub_arak : public CreatureScript
                         me->CastSpell(me, SPELL_EMERGE, true);
                         me->RemoveAura(SPELL_SUBMERGE);
                         me->RemoveAura(SPELL_IMPALE_PERIODIC);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
+                        me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
                         break;
                     case EVENT_SUMMON_ASSASSINS:
                         SummonHelpers(509.32f, 247.42f, 239.48f, SPELL_SUMMON_ASSASSIN);
@@ -230,7 +230,7 @@ class boss_anub_arak : public CreatureScript
                         break;
                 }
 
-                if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
+                if (!me->HasUnitFlag(UNIT_FLAG_NOT_SELECTABLE))
                     DoMeleeAttackIfReady();
             }
         };
@@ -241,94 +241,61 @@ class boss_anub_arak : public CreatureScript
         }
 };
 
-class spell_azjol_nerub_carrion_beetels : public SpellScriptLoader
+class spell_azjol_nerub_carrion_beetels : public AuraScript
 {
-    public:
-        spell_azjol_nerub_carrion_beetels() : SpellScriptLoader("spell_azjol_nerub_carrion_beetels") { }
+    PrepareAuraScript(spell_azjol_nerub_carrion_beetels)
 
-        class spell_azjol_nerub_carrion_beetelsAuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_azjol_nerub_carrion_beetelsAuraScript)
+    void HandleEffectPeriodic(AuraEffect const*  /*aurEff*/)
+    {
+        // Xinef: 2 each second
+        GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SUMMON_CARRION_BEETLES, true);
+        GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SUMMON_CARRION_BEETLES, true);
+    }
 
-            void HandleEffectPeriodic(AuraEffect const*  /*aurEff*/)
-            {
-                // Xinef: 2 each second
-                GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SUMMON_CARRION_BEETLES, true);
-                GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SUMMON_CARRION_BEETLES, true);
-            }
-
-            void Register() override
-            {
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_azjol_nerub_carrion_beetelsAuraScript::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
-            }
-        };
-
-        AuraScript *GetAuraScript() const override
-        {
-            return new spell_azjol_nerub_carrion_beetelsAuraScript();
-        }
+    void Register() override
+    {
+        OnEffectPeriodic += AuraEffectPeriodicFn(spell_azjol_nerub_carrion_beetels::HandleEffectPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+    }
 };
 
-class spell_azjol_nerub_pound : public SpellScriptLoader
+class spell_azjol_nerub_pound : public SpellScript
 {
-    public:
-        spell_azjol_nerub_pound() : SpellScriptLoader("spell_azjol_nerub_pound") { }
+    PrepareSpellScript(spell_azjol_nerub_pound);
 
-        class spell_azjol_nerub_pound_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_azjol_nerub_pound_SpellScript);
+    void HandleApplyAura(SpellEffIndex  /*effIndex*/)
+    {
+        if (Unit* unitTarget = GetHitUnit())
+            GetCaster()->CastSpell(unitTarget, SPELL_POUND_DAMAGE, true);
+    }
 
-            void HandleApplyAura(SpellEffIndex  /*effIndex*/)
-            {
-                if (Unit* unitTarget = GetHitUnit())
-                    GetCaster()->CastSpell(unitTarget, SPELL_POUND_DAMAGE, true);
-            }
-
-            void Register() override
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_azjol_nerub_pound_SpellScript::HandleApplyAura, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
-            }
-        };
-
-        SpellScript* GetSpellScript() const override
-        {
-            return new spell_azjol_nerub_pound_SpellScript();
-        }
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_azjol_nerub_pound::HandleApplyAura, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
+    }
 };
 
-class spell_azjol_nerub_impale_summon : public SpellScriptLoader
+class spell_azjol_nerub_impale_summon : public SpellScript
 {
-    public:
-        spell_azjol_nerub_impale_summon() : SpellScriptLoader("spell_azjol_nerub_impale_summon") { }
+    PrepareSpellScript(spell_azjol_nerub_impale_summon);
 
-        class spell_azjol_nerub_impale_summon_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_azjol_nerub_impale_summon_SpellScript);
+    void SetDest(SpellDestination& dest)
+    {
+        // Adjust effect summon position
+        float floorZ = GetCaster()->GetMapHeight(GetCaster()->GetPositionX(), GetCaster()->GetPositionY(), GetCaster()->GetPositionZ(), true);
+        if (floorZ > INVALID_HEIGHT)
+            dest._position.m_positionZ = floorZ;
+    }
 
-            void SetDest(SpellDestination& dest)
-            {
-                // Adjust effect summon position
-                float floorZ = GetCaster()->GetMapHeight(GetCaster()->GetPositionX(), GetCaster()->GetPositionY(), GetCaster()->GetPositionZ(), true);
-                if (floorZ > INVALID_HEIGHT)
-                    dest._position.m_positionZ = floorZ;
-            }
-
-            void Register() override
-            {
-                OnDestinationTargetSelect += SpellDestinationTargetSelectFn(spell_azjol_nerub_impale_summon_SpellScript::SetDest, EFFECT_0, TARGET_DEST_CASTER);
-            }
-        };
-
-        SpellScript* GetSpellScript() const override
-        {
-            return new spell_azjol_nerub_impale_summon_SpellScript();
-        }
+    void Register() override
+    {
+        OnDestinationTargetSelect += SpellDestinationTargetSelectFn(spell_azjol_nerub_impale_summon::SetDest, EFFECT_0, TARGET_DEST_CASTER);
+    }
 };
 
 void AddSC_boss_anub_arak()
 {
     new boss_anub_arak();
-    new spell_azjol_nerub_carrion_beetels();
-    new spell_azjol_nerub_pound();
-    new spell_azjol_nerub_impale_summon();
+    RegisterSpellScript(spell_azjol_nerub_carrion_beetels);
+    RegisterSpellScript(spell_azjol_nerub_pound);
+    RegisterSpellScript(spell_azjol_nerub_impale_summon);
 }

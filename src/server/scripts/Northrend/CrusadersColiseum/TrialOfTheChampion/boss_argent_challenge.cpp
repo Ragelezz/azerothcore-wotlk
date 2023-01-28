@@ -155,10 +155,11 @@ public:
                     me->SetFaction(FACTION_FRIENDLY);
                     events.Reset();
                     Talk(TEXT_EADRIC_DEATH);
-                    me->getThreatMgr().clearReferences();
+                    me->GetThreatMgr().clearReferences();
                     me->SetRegeneratingHealth(false);
                     _EnterEvadeMode();
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetImmuneToAll(true);
                     if( pInstance )
                         pInstance->SetData(BOSS_ARGENT_CHALLENGE, DONE);
                 }
@@ -188,7 +189,7 @@ public:
                     if( Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 55.0f, true) )
                     {
                         char buffer[100];
-                        sprintf(buffer, "Eadric the Pure targets %s with the Hammer of the Righteous!", target->GetName().c_str());
+                        snprintf(buffer, sizeof(buffer), "Eadric the Pure targets %s with the Hammer of the Righteous!", target->GetName().c_str());
                         me->TextEmote(buffer, nullptr, true);
                         Talk(TEXT_EADRIC_HAMMER);
                         me->CastSpell(target, SPELL_HAMMER_JUSTICE, true);
@@ -302,10 +303,11 @@ public:
                     me->SetFaction(FACTION_FRIENDLY);
                     events.Reset();
                     Talk(TEXT_PALETRESS_DEATH);
-                    me->getThreatMgr().clearReferences();
+                    me->GetThreatMgr().clearReferences();
                     me->SetRegeneratingHealth(false);
                     _EnterEvadeMode();
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetImmuneToAll(true);
                     if( pInstance )
                     {
                         pInstance->SetData(BOSS_ARGENT_CHALLENGE, DONE);
@@ -404,6 +406,8 @@ public:
             events.Reset();
             me->SetReactState(REACT_PASSIVE);
             me->SetObjectScale(0.01f);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->SetImmuneToAll(true);
             events.ScheduleEvent(EVENT_MEMORY_SCALE, 500);
         }
 
@@ -439,7 +443,8 @@ public:
 
                     break;
                 case EVENT_MEMORY_START_ATTACK:
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetImmuneToAll(false);
                     if( Unit* target = me->SelectNearestTarget(200.0f) )
                     {
                         AttackStart(target);

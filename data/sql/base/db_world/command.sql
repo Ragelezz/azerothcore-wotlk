@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,16 +12,16 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.command
+-- Dumpar struktur för tabell acore_world.command
 DROP TABLE IF EXISTS `command`;
 CREATE TABLE IF NOT EXISTS `command` (
   `name` varchar(50) NOT NULL DEFAULT '',
-  `security` TINYINT unsigned NOT NULL DEFAULT 0,
-  `help` longtext DEFAULT NULL,
+  `security` tinyint unsigned NOT NULL DEFAULT '0',
+  `help` longtext,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=FIXED COMMENT='Chat System';
 
--- Дамп данных таблицы acore_world.command: 572 rows
+-- Dumpar data för tabell acore_world.command: 583 rows
 DELETE FROM `command`;
 /*!40000 ALTER TABLE `command` DISABLE KEYS */;
 INSERT INTO `command` (`name`, `security`, `help`) VALUES
@@ -69,7 +69,7 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('bf start', 3, 'Syntax: .bf start #battleid'),
 	('bf stop', 3, 'Syntax: .bf stop #battleid'),
 	('bf switch', 3, 'Syntax: .bf switch #battleid'),
-	('bf timer', 3, 'Syntax: .bf timer #battleid #timer'),
+	('bf timer', 3, 'Syntax: .bf timer #battleid #timer\n#timer: use a timestring like "1h15m30s".'),
 	('bindsight', 3, 'Syntax: .bindsight\r\n\r\nBinds vision to the selected unit indefinitely. Cannot be used while currently possessing a target.'),
 	('cast', 2, 'Syntax: .cast #spellid [triggered]\r\n  Cast #spellid to selected target. If no target selected cast to self. If \'trigered\' or part provided then spell casted with triggered flag.'),
 	('cast back', 2, 'Syntax: .cast back #spellid [triggered]\r\n  Selected target will cast #spellid to your character. If \'trigered\' or part provided then spell casted with triggered flag.'),
@@ -115,7 +115,7 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('debug getitemstate', 3, 'Syntax: '),
 	('debug getitemvalue', 3, 'Syntax: '),
 	('debug getvalue', 3, 'Syntax: '),
-	('debug hostil', 1, 'Syntax: '),
+	('debug hostile', 1, 'Syntax: '),
 	('debug itemexpire', 3, 'Syntax: '),
 	('debug lootrecipient', 3, 'Syntax: '),
 	('debug los', 3, 'Syntax: '),
@@ -146,10 +146,8 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('debug threat', 3, 'Syntax: '),
 	('debug update', 3, ''),
 	('debug uws', 3, 'Syntax: '),
-	('deserter bg add', 3, 'Syntax: .deserter bg add $time \n\n Adds the bg deserter debuff to your target with $time duration.'),
-	('deserter bg remove', 3, 'Syntax: .deserter bg remove \n\n Removes the bg deserter debuff from your target.'),
-	('deserter instance add', 3, 'Syntax: .deserter instance add $time \n\n Adds the instance deserter debuff to your target with $time duration.'),
-	('deserter instance remove', 3, 'Syntax: .deserter instance remove \n\n Removes the instance deserter debuff from your target.'),
+	('deserter instance remove', 3, 'Syntax: .deserter instance remove $playerName \n\n Removes the instance deserter debuff from a player or your target.'),
+	('deserter instance add', 3, 'Syntax: .deserter instance add $playerName <$time>\r\nAdds the instance deserter debuff to a player or your target with $time.\nOptional $time: use a timestring like "1h15m30s". Default: 30m'),
 	('dev', 3, 'Syntax: .dev [on/off]\r\n\r\nEnable or Disable in game Dev tag or show current state if on/off not provided.'),
 	('die', 2, 'Syntax: .die\r\n\r\nKill the selected player. If no player is selected, it will kill you.'),
 	('disable add battleground', 3, 'Syntax: .disable add battleground $entry $flag $comment'),
@@ -320,7 +318,7 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('morph reset', 1, 'Syntax: .morph reset - Doesn\'t use any parameters to reset the selected target\'s model'),
 	('morph target', 1, 'Syntax: .morph target #displayid - Change the selected target\'s current model id to #displayid.'),
 	('movegens', 3, 'Syntax: .movegens\r\n  Show movement generators stack for selected creature or player.'),
-	('mute', 2, 'Syntax: .mute [$playerName] $timeInMinutes [$reason]\r\n\r\nDisible chat messaging for any character from account of character $playerName (or currently selected) at $timeInMinutes minutes. Player can be offline.'),
+	('mute', 2, 'Syntax: .mute [$playerName] $mutetime [$reason]\r\nDisible chat messaging for any character from account of character $playerName (or currently selected) at $mutetime time. Player can be offline.\n$mutetime: use a timestring like "1d15h33s".'),
 	('mutehistory', 2, 'Syntax: .mutehistory $accountName. Shows mute history for an account.'),
 	('nameannounce', 2, 'Syntax: .nameannounce $announcement.\nSend an announcement to all online players, displaying the name of the sender.'),
 	('neargrave', 2, 'Syntax: .neargrave [alliance|horde]\r\n\r\nFind nearest graveyard linked to zone (or only nearest from accepts alliance or horde faction ghosts).'),
@@ -353,7 +351,7 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('npc set model', 3, 'Syntax: .npc set model #displayid\r\n\r\nChange the model id of the selected creature to #displayid.'),
 	('npc set movetype', 3, 'Syntax: .npc set movetype [#creature_guid] stay/random/way [NODEL]\r\n\r\nSet for creature pointed by #creature_guid (or selected if #creature_guid not provided) movement type and move it to respawn position (if creature alive). Any existing waypoints for creature will be removed from the database if you do not use NODEL. If the creature is dead then movement type will applied at creature respawn.\r\nMake sure you use NODEL, if you want to keep the waypoints.'),
 	('npc set phase', 3, 'Syntax: .npc set phase #phasemask\r\n\r\nSelected unit or pet phasemask changed to #phasemask with related world vision update for players. In creature case state saved to DB and persistent. In pet case change active until in game phase changed for owner, owner re-login, or GM-mode enable/disable..'),
-	('npc set spawntime', 3, 'Syntax: .npc set spawntime #time \r\n\r\nAdjust spawntime of selected creature to time.'),
+	('npc set spawntime', 3, 'Syntax: .npc set spawntime #time\r\nAdjust spawntime of selected creature to #time.\n#time: use a timestring like "10m30s".'),
 	('npc set wanderdistance', 3, 'Syntax: .npc set wanderdistance #dist\r\n\r\nAdjust wander distance of selected creature to dist.'),
 	('npc tame', 2, 'Syntax: '),
 	('npc textemote', 2, 'Syntax: .npc textemote #emoteid\r\n\r\nMake the selected creature to do textemote with an emote of id #emoteid.'),
@@ -483,7 +481,7 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('reset spells', 3, 'Syntax: .reset spells [Playername]\r\n  Removes all non-original spells from spellbook.\r\n. Playername can be name of offline character.'),
 	('reset stats', 3, 'Syntax: .reset stats [Playername]\r\n  Resets(recalculate) all stats of the targeted player to their original VALUESat current level.'),
 	('reset talents', 3, 'Syntax: .reset talents [Playername]\r\n  Removes all talents of the targeted player or pet or named player. Playername can be name of offline character. With player talents also will be reset talents for all character\'s pets if any.'),
-	('respawn', 2, 'Syntax: .respawn\r\n\r\nRespawn all nearest creatures and GO without waiting respawn time expiration.'),
+	('respawn', 2, 'Syntax: .respawn\nRespawn the selected unit without waiting respawn time expiration.'),
 	('revive', 2, 'Syntax: .revive\r\n\r\nRevive the selected player. If no player is selected, it will revive you.'),
 	('save', 0, 'Syntax: .save\r\n\r\nSaves your character.'),
 	('saveall', 2, 'Syntax: .saveall\r\n\r\nSave all characters in game.'),
@@ -495,18 +493,18 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('server', 3, 'Syntax: .server $subcommand\nType .server to see the list of possible subcommands or .help server $subcommand to see info on subcommands'),
 	('server corpses', 2, 'Syntax: .server corpses\r\n\r\nTriggering corpses expire check in world.'),
 	('server exit', 4, 'Syntax: .server exit\r\n\r\nTerminate trinity-core NOW. Exit code 0.'),
-	('server idlerestart', 4, 'Syntax: .server idlerestart #delay\r\n\r\nRestart the server after #delay seconds if no active connections are present (no players). Use #exist_code or 2 as program exist code.'),
+	('server idlerestart', 4, 'Syntax: .server idlerestart #delay\r\nRestart the server after #delay if no active connections are present (no players). Use #exist_code or 2 as program exist code.\n#delay: use a timestring like "1h15m30s".'),
 	('server idlerestart cancel', 3, 'Syntax: .server idlerestart cancel\r\n\r\nCancel the restart/shutdown timer if any.'),
-	('server idleshutdown', 4, 'Syntax: .server idleshutdown #delay [#exist_code]\r\n\r\nShut the server down after #delay seconds if no active connections are present (no players). Use #exist_code or 0 as program exist code.'),
+	('server idleshutdown', 4, 'Syntax: .server idleshutdown #delay [#exist_code]\r\nShut the server down after #delay if no active connections are present (no players). Use #exist_code or 0 as program exist code.\n#delay: use a timestring like "1h15m30s".'),
 	('server idleshutdown cancel', 3, 'Syntax: .server idleshutdown cancel\r\n\r\nCancel the restart/shutdown timer if any.'),
 	('server info', 0, 'Syntax: .server info\r\n\r\nDisplay server version and the number of connected players.'),
 	('server motd', 0, 'Syntax: .server motd\r\n\r\nShow server Message of the day.'),
-	('server restart', 3, 'Syntax: .server restart #delay\r\n\r\nRestart the server after #delay seconds. Use #exist_code or 2 as program exist code.'),
+	('server restart', 3, 'Syntax: .server restart #delay\r\nRestart the server after #delay. Use #exist_code or 2 as program exist code.\n#delay: use a timestring like "1h15m30s".'),
 	('server restart cancel', 3, 'Syntax: .server restart cancel\r\n\r\nCancel the restart/shutdown timer if any.'),
 	('server set closed', 4, 'Syntax: server set closed on/off\r\n\r\nSets whether the world accepts new client connectsions.'),
 	('server set loglevel', 4, 'Syntax: .server set loglevel $facility $name $loglevel. $facility can take the values: appender (a) or logger (l). $loglevel can take the values: disabled (0), trace (1), debug (2), info (3), warn (4), error (5) or fatal (6)'),
 	('server set motd', 3, 'Syntax: .server set motd $MOTD\r\n\r\nSet server Message of the day.'),
-	('server shutdown', 3, 'Syntax: .server shutdown #delay [#exit_code]\r\n\r\nShut the server down after #delay seconds. Use #exit_code or 0 as program exit code.'),
+	('server shutdown', 3, 'Syntax: .server shutdown #delay [#exit_code]\r\nShut the server down after #delay. Use #exit_code or 0 as program exit code.\n#delay: use a timestring like "1h15m30s".'),
 	('server shutdown cancel', 3, 'Syntax: .server shutdown cancel\r\n\r\nCancel the restart/shutdown timer if any.'),
 	('server debug', 3, 'Syntax: .server debug\r\nShows detailed information about the server setup, useful when reporting a bug.'),
 	('setskill', 2, 'Syntax: .setskill #skill #level [#max]\r\n\r\nSet a skill of id #skill with a current skill value of #level and a maximum value of #max (or equal current maximum if not provide) for the selected character. If no character is selected, you learn the skill.'),
@@ -596,7 +594,20 @@ INSERT INTO `command` (`name`, `security`, `help`) VALUES
 	('item refund', 3, 'Syntax: .item refund <name> <item> <extendedCost> \nRemoves the item and restores honor/arena/items according to extended cost.'),
 	('settings', 1, 'Syntax: .settings $subcommand\nType .setting to see the list of all available commands.'),
 	('settings announcer', 1, 'Syntax: .settings announcer <type> <on/off>.\nDisables receiving announcements. Valid announcement types are: \'autobroadcast\', \'arena\' and \'bg\''),
-	('reload creature_movement_override', 3, 'Syntax: .reload creature_movement_override\nReload creature_movement_override table.');
+	('reload creature_movement_override', 3, 'Syntax: .reload creature_movement_override\nReload creature_movement_override table.'),
+	('go quest', 1, 'Syntax: .go quest <starter/ender> <quest>.\nTeleports you to the quest starter/ender creature or object.'),
+	('guild rename', 3, 'Syntax: .guild rename "$GuildName" "$NewGuildName" \n\n Rename a guild named $GuildName with $NewGuildName. Guild name and new guild name must in quotes.'),
+	('reload quest_greeting', 3, 'Syntax: .reload quest_greeting\nReload quest_greeting table.'),
+	('reload quest_greeting_locale', 3, 'Syntax: .reload quest_greeting_locale\nReload quest_greeting_locale table.'),
+	('debug objectcount', 3, 'Syntax: .debug objectcount <optional map id> Shows the number of Creatures and GameObjects for the specified map id or for all maps if none is specified'),
+	('respawn all', 2, 'Syntax: .respawn all\nRespawn all nearest creatures and GO without waiting respawn time expiration.'),
+	('reload mail_server_template', 3, 'Syntax: .reload mail_server_template\nReload server_mail_template table.'),
+	('deserter instance remove all', 3, 'Syntax: .deserter instance remove all <$maxDuration>\r\n Removes the instance deserter debuff from all online and offline players.\nOptional $maxDuration sets the maximum duration to be removed. Use a timestring like "1h45m". "-1" for any duration. Default: 30m'),
+	('deserter bg add', 3, 'Syntax: .deserter bg add $playerName <$time>\r\nAdds the bg deserter debuff to a player or your target with $time.\nOptional $time: use a timestring like "1h15m30s".Default: 15m'),
+	('deserter bg remove', 3, 'Syntax: .deserter bg remove $playerName \n\n Removes the bg deserter debuff from a player or your target.'),
+	('deserter bg remove all', 3, 'Syntax: .deserter bg remove all <$maxDuration>\r\n Removes the bg deserter debuff from all online and offline players.\nOptional $maxDuration sets the maximum duration to be removed. Use a timestring like "1h45m". "-1" for any duration. Default: 15m'),
+	('debug play visual', 3, 'Syntax: .debug play visual #visualid\r\nPlay spell visual with #visualid.\n#visualid refers to the ID from SpellVisualKit.dbc'),
+	('npc guid', 1, 'Syntax: .npc guid\r\n\r\nDisplays GUID, faction, NPC flags, Entry ID, Model ID for selected creature.');
 /*!40000 ALTER TABLE `command` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

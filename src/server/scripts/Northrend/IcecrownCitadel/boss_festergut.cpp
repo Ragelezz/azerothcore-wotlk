@@ -112,7 +112,7 @@ public:
         {
             if (!instance->CheckRequiredBosses(DATA_FESTERGUT, who->ToPlayer()))
             {
-                EnterEvadeMode();
+                EnterEvadeMode(EVADE_REASON_OTHER);
                 instance->DoCastSpellOnPlayers(LIGHT_S_HAMMER_TELEPORT);
                 return;
             }
@@ -151,11 +151,11 @@ public:
             instance->SetBossState(DATA_FESTERGUT, FAIL);
         }
 
-        void EnterEvadeMode() override
+        void EnterEvadeMode(EvadeReason why) override
         {
-            ScriptedAI::EnterEvadeMode();
+            ScriptedAI::EnterEvadeMode(why);
             if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PROFESSOR_PUTRICIDE)))
-                professor->AI()->EnterEvadeMode();
+                professor->AI()->EnterEvadeMode(why);
         }
 
         void KilledUnit(Unit* victim) override
@@ -189,7 +189,7 @@ public:
 
         void UpdateAI(uint32 diff) override
         {
-            if (!UpdateVictim() || !CheckInRoom())
+            if (!UpdateVictim())
                 return;
 
             events.Update(diff);
@@ -235,7 +235,7 @@ public:
                     {
                         std::list<Unit*> targets;
                         uint32 minTargets = RAID_MODE<uint32>(3, 8, 3, 8);
-                        SelectTargetList(targets, minTargets, SelectTargetMethod::Random, -5.0f, true);
+                        SelectTargetList(targets, minTargets, SelectTargetMethod::Random, 0, -5.0f, true);
                         float minDist = 0.0f;
                         if (targets.size() >= minTargets)
                             minDist = -5.0f;

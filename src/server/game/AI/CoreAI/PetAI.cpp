@@ -28,10 +28,14 @@
 #include "SpellMgr.h"
 #include "Util.h"
 
-int PetAI::Permissible(Creature const* creature)
+int32 PetAI::Permissible(Creature const* creature)
 {
-    if (creature->IsPet())
-        return PERMIT_BASE_SPECIAL;
+    if (creature->HasUnitTypeMask(UNIT_MASK_CONTROLABLE_GUARDIAN))
+    {
+        if (reinterpret_cast<Guardian const*>(creature)->GetOwner()->GetTypeId() == TYPEID_PLAYER)
+            return PERMIT_BASE_PROACTIVE;
+        return PERMIT_BASE_REACTIVE;
+    }
 
     return PERMIT_BASE_NO;
 }
@@ -563,7 +567,7 @@ void PetAI::HandleReturnMovement()
     me->GetCharmInfo()->SetForcedTargetGUID();
 
     // xinef: remember that npcs summoned by npcs can also be pets
-    me->DeleteThreatList();
+    me->GetThreatMgr().ClearAllThreat();
     me->ClearInPetCombat();
 }
 
@@ -574,7 +578,12 @@ void PetAI::SpellHit(Unit* caster, SpellInfo const* spellInfo)
     {
         me->GetCharmInfo()->SetForcedSpell(0);
         me->GetCharmInfo()->SetForcedTargetGUID();
-        AttackStart(caster);
+
+        if (CanAttack(caster, spellInfo))
+        {
+            // Only chase if not commanded to stay or if stay but commanded to attack
+            DoAttack(caster, (!me->GetCharmInfo()->HasCommandState(COMMAND_STAY) || me->GetCharmInfo()->IsCommandAttack()));
+        }
     }
 }
 
@@ -587,9 +596,9 @@ void PetAI::DoAttack(Unit* target, bool chase)
     {
         // xinef: properly fix fake combat after pet is sent to attack
         if (Unit* owner = me->GetOwner())
-            owner->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT);
+            owner->SetUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
 
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT);
+        me->SetUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
 
         // Play sound to let the player know the pet is attacking something it picked on its own
         if (me->HasReactState(REACT_AGGRESSIVE) && !me->GetCharmInfo()->IsCommandAttack())
@@ -676,7 +685,7 @@ bool PetAI::CanAttack(Unit* target, SpellInfo const* spellInfo)
         return false;
 
     // xinef: pets of mounted players have stunned flag only, check this also
-    if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED))
+    if (me->HasUnitFlag(UNIT_FLAG_STUNNED))
         return false;
 
     // pussywizard: TEMP!
@@ -705,6 +714,12 @@ bool PetAI::CanAttack(Unit* target, SpellInfo const* spellInfo)
     //  Pets attacking something (or chasing) should only switch targets if owner tells them to
     if (me->GetVictim() && me->GetVictim() != target)
     {
+        // Forced change target if it's taunt
+        if (spellInfo && spellInfo->HasAura(SPELL_AURA_MOD_TAUNT))
+        {
+            return true;
+        }
+
         // Check if our owner selected this target and clicked "attack"
         Unit* ownerTarget = nullptr;
         if (Player* owner = me->GetCharmerOrOwner()->ToPlayer())

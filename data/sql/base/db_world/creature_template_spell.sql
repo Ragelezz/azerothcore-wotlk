@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,18 +12,18 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.creature_template_spell
+-- Dumpar struktur för tabell acore_world.creature_template_spell
 DROP TABLE IF EXISTS `creature_template_spell`;
 CREATE TABLE IF NOT EXISTS `creature_template_spell` (
-  `CreatureID` MEDIUMINT unsigned NOT NULL,
-  `Index` TINYINT unsigned NOT NULL DEFAULT 0,
-  `Spell` MEDIUMINT unsigned DEFAULT NULL,
-  `VerifiedBuild` SMALLINT DEFAULT 0,
+  `CreatureID` mediumint unsigned NOT NULL,
+  `Index` tinyint unsigned NOT NULL DEFAULT '0',
+  `Spell` mediumint unsigned DEFAULT NULL,
+  `VerifiedBuild` smallint DEFAULT '0',
   PRIMARY KEY (`CreatureID`,`Index`),
-  CHECK (`Index` >= 0 and `Index` <= 7)
+  CONSTRAINT `creature_template_spell_chk_1` CHECK (((`Index` >= 0) and (`Index` <= 7)))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.creature_template_spell: ~9 509 rows (приблизительно)
+-- Dumpar data för tabell acore_world.creature_template_spell: ~9 511 rows (ungefär)
 DELETE FROM `creature_template_spell`;
 /*!40000 ALTER TABLE `creature_template_spell` DISABLE KEYS */;
 INSERT INTO `creature_template_spell` (`CreatureID`, `Index`, `Spell`, `VerifiedBuild`) VALUES
@@ -2822,8 +2822,8 @@ INSERT INTO `creature_template_spell` (`CreatureID`, `Index`, `Spell`, `Verified
 	(7450, 1, 13738, 12340),
 	(7451, 0, 34971, 12340),
 	(7451, 1, 13738, 12340),
-	(7453, 0, 24957, 12340),
-	(7453, 1, 38657, 12340),
+	(7453, 0, 15798, 12340),
+	(7453, 1, 12160, 12340),
 	(7454, 0, 34971, 12340),
 	(7456, 0, 3589, 12340),
 	(7457, 0, 3604, 12340),
@@ -4796,7 +4796,9 @@ INSERT INTO `creature_template_spell` (`CreatureID`, `Index`, `Spell`, `Verified
 	(15088, 0, 16856, 12340),
 	(15088, 1, 9080, 12340),
 	(15101, 0, 3391, 12340),
-	(15112, 0, 24178, 12340),
+	(15111, 0, 24611, 0),
+	(15111, 1, 24612, 0),
+	(15112, 0, 24261, 12340),
 	(15117, 0, 24341, 12340),
 	(15121, 0, 20792, 12340),
 	(15121, 1, 11969, 12340),

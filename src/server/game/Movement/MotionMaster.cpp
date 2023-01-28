@@ -32,6 +32,11 @@
 #include "TargetedMovementGenerator.h"
 #include "WaypointMovementGenerator.h"
 
+inline MovementGenerator* GetIdleMovementGenerator()
+{
+    return sMovementGeneratorRegistry->GetRegistryItem(IDLE_MOTION_TYPE)->Create();
+}
+
  // ---- ChaseRange ---- //
 
 ChaseRange::ChaseRange(float range) : MinRange(range > CONTACT_DISTANCE ? 0 : range - CONTACT_DISTANCE), MinTolerance(range), MaxRange(range + CONTACT_DISTANCE), MaxTolerance(range) { }
@@ -59,9 +64,9 @@ bool ChaseAngle::IsAngleOkay(float relativeAngle) const
     return (std::min(diff, float(2 * M_PI) - diff) <= Tolerance);
 }
 
-inline bool isStatic(MovementGenerator* mv)
+inline bool isStatic(MovementGenerator* movement)
 {
-    return (mv == &si_idleMovement);
+    return (movement == GetIdleMovementGenerator());
 }
 
 void MotionMaster::Initialize()
@@ -80,16 +85,7 @@ void MotionMaster::Initialize()
 // set new default movement generator
 void MotionMaster::InitDefault()
 {
-    // Xinef: Do not allow to initialize any motion generator for dead creatures
-    if (_owner->GetTypeId() == TYPEID_UNIT && _owner->IsAlive())
-    {
-        MovementGenerator* movement = FactorySelector::selectMovementGenerator(_owner->ToCreature());
-        Mutate(movement == nullptr ? &si_idleMovement : movement, MOTION_SLOT_IDLE);
-    }
-    else
-    {
-        Mutate(&si_idleMovement, MOTION_SLOT_IDLE);
-    }
+    Mutate(FactorySelector::SelectMovementGenerator(_owner), MOTION_SLOT_IDLE);
 }
 
 MotionMaster::~MotionMaster()
@@ -236,13 +232,13 @@ void MotionMaster::MoveIdle()
 {
     //! Should be preceded by MovementExpired or Clear if there's an overlying movementgenerator active
     if (empty() || !isStatic(top()))
-        Mutate(&si_idleMovement, MOTION_SLOT_IDLE);
+        Mutate(GetIdleMovementGenerator(), MOTION_SLOT_IDLE);
 }
 
 void MotionMaster::MoveRandom(float wanderDistance)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_UNIT)
@@ -265,7 +261,7 @@ void MotionMaster::MoveTargetedHome()
     {
         _owner->ClearUnitState(UNIT_STATE_EVADE);
         // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-        if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+        if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
             return;
 
         LOG_DEBUG("movement.motionmaster", "Pet or controlled creature ({}) targeting home", _owner->GetGUID().ToString());
@@ -285,7 +281,7 @@ void MotionMaster::MoveTargetedHome()
 void MotionMaster::MoveConfused()
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -304,7 +300,7 @@ void MotionMaster::MoveChase(Unit* target,  std::optional<ChaseRange> dist, std:
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
     // ignore movement request if target not exist
-    if (!target || target == _owner || _owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (!target || target == _owner || _owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     //_owner->ClearUnitState(UNIT_STATE_FOLLOW);
@@ -372,7 +368,7 @@ void MotionMaster::MoveFollow(Unit* target, float dist, float angle, MovementSlo
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
     // ignore movement request if target not exist
-    if (!target || target == _owner || _owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (!target || target == _owner || _owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
     {
         return;
     }
@@ -395,7 +391,7 @@ void MotionMaster::MoveFollow(Unit* target, float dist, float angle, MovementSlo
 void MotionMaster::MovePoint(uint32 id, float x, float y, float z, bool generatePath, bool forceDestination, MovementSlot slot, float orientation /* = 0.0f*/)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -413,7 +409,7 @@ void MotionMaster::MovePoint(uint32 id, float x, float y, float z, bool generate
 void MotionMaster::MoveSplinePath(Movement::PointsArray* path)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -429,7 +425,7 @@ void MotionMaster::MoveSplinePath(Movement::PointsArray* path)
 void MotionMaster::MoveLand(uint32 id, Position const& pos, float speed /* = 0.0f*/)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     float x, y, z;
@@ -459,7 +455,7 @@ void MotionMaster::MoveLand(uint32 id, float x, float y, float z, float speed /*
 void MotionMaster::MoveTakeoff(uint32 id, Position const& pos, float speed /* = 0.0f*/)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     float x, y, z;
@@ -549,7 +545,7 @@ void MotionMaster::MoveJump(float x, float y, float z, float speedXY, float spee
 void MotionMaster::MoveFall(uint32 id /*=0*/, bool addFlagForNPC)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     // use larger distance for vmap height search than in most other cases
@@ -590,7 +586,7 @@ void MotionMaster::MoveFall(uint32 id /*=0*/, bool addFlagForNPC)
 void MotionMaster::MoveCharge(float x, float y, float z, float speed, uint32 id, const Movement::PointsArray* path, bool generatePath, float orientation /* = 0.0f*/, ObjectGuid targetGUID /*= ObjectGuid::Empty*/)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (Impl[MOTION_SLOT_CONTROLLED] && Impl[MOTION_SLOT_CONTROLLED]->GetMovementGeneratorType() != DISTRACT_MOTION_TYPE)
@@ -608,10 +604,23 @@ void MotionMaster::MoveCharge(float x, float y, float z, float speed, uint32 id,
     }
 }
 
+void MotionMaster::MoveCharge(PathGenerator const& path, float speed /*= SPEED_CHARGE*/, ObjectGuid targetGUID /*= ObjectGuid::Empty*/)
+{
+    G3D::Vector3 dest = path.GetActualEndPosition();
+
+    MoveCharge(dest.x, dest.y, dest.z, speed, EVENT_CHARGE_PREPATH, nullptr, false, 0.0f, targetGUID);
+
+    // Charge movement is not started when using EVENT_CHARGE_PREPATH
+    Movement::MoveSplineInit init(_owner);
+    init.MovebyPath(path.GetPath());
+    init.SetVelocity(speed);
+    init.Launch();
+}
+
 void MotionMaster::MoveSeekAssistance(float x, float y, float z)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -631,7 +640,7 @@ void MotionMaster::MoveSeekAssistance(float x, float y, float z)
 void MotionMaster::MoveSeekAssistanceDistract(uint32 time)
 {
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -651,7 +660,7 @@ void MotionMaster::MoveFleeing(Unit* enemy, uint32 time)
         return;
 
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -700,7 +709,7 @@ void MotionMaster::MoveDistract(uint32 timer)
         return;
 
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     /*if (_owner->GetTypeId() == TYPEID_PLAYER)
@@ -752,7 +761,7 @@ void MotionMaster::MovePath(uint32 path_id, bool repeatable)
         return;
 
     // Xinef: do not allow to move with UNIT_FLAG_DISABLE_MOVE
-    if (_owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (_owner->HasUnitFlag(UNIT_FLAG_DISABLE_MOVE))
         return;
 
     //We set waypoint movement as new default movement generator

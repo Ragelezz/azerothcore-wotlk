@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,23 +12,23 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.quest_poi
+-- Dumpar struktur för tabell acore_world.quest_poi
 DROP TABLE IF EXISTS `quest_poi`;
 CREATE TABLE IF NOT EXISTS `quest_poi` (
-  `QuestID` INT unsigned NOT NULL DEFAULT 0,
-  `id` INT unsigned NOT NULL DEFAULT 0,
-  `ObjectiveIndex` INT NOT NULL DEFAULT 0,
-  `MapID` INT unsigned NOT NULL DEFAULT 0,
-  `WorldMapAreaId` INT unsigned NOT NULL DEFAULT 0,
-  `Floor` INT unsigned NOT NULL DEFAULT 0,
-  `Priority` INT unsigned NOT NULL DEFAULT 0,
-  `Flags` INT unsigned NOT NULL DEFAULT 0,
-  `VerifiedBuild` SMALLINT DEFAULT 0,
+  `QuestID` int unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL DEFAULT '0',
+  `ObjectiveIndex` int NOT NULL DEFAULT '0',
+  `MapID` int unsigned NOT NULL DEFAULT '0',
+  `WorldMapAreaId` int unsigned NOT NULL DEFAULT '0',
+  `Floor` int unsigned NOT NULL DEFAULT '0',
+  `Priority` int unsigned NOT NULL DEFAULT '0',
+  `Flags` int unsigned NOT NULL DEFAULT '0',
+  `VerifiedBuild` smallint DEFAULT '0',
   PRIMARY KEY (`QuestID`,`id`),
   KEY `idx` (`QuestID`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.quest_poi: 18 771 rows
+-- Dumpar data för tabell acore_world.quest_poi: 18 771 rows
 DELETE FROM `quest_poi`;
 /*!40000 ALTER TABLE `quest_poi` DISABLE KEYS */;
 INSERT INTO `quest_poi` (`QuestID`, `id`, `ObjectiveIndex`, `MapID`, `WorldMapAreaId`, `Floor`, `Priority`, `Flags`, `VerifiedBuild`) VALUES

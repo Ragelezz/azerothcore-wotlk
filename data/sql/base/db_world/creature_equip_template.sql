@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,19 +12,19 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.creature_equip_template
+-- Dumpar struktur för tabell acore_world.creature_equip_template
 DROP TABLE IF EXISTS `creature_equip_template`;
 CREATE TABLE IF NOT EXISTS `creature_equip_template` (
-  `CreatureID` MEDIUMINT unsigned NOT NULL DEFAULT 0,
-  `ID` TINYINT unsigned NOT NULL DEFAULT 1,
-  `ItemID1` MEDIUMINT unsigned NOT NULL DEFAULT 0,
-  `ItemID2` MEDIUMINT unsigned NOT NULL DEFAULT 0,
-  `ItemID3` MEDIUMINT unsigned NOT NULL DEFAULT 0,
-  `VerifiedBuild` SMALLINT DEFAULT 0,
+  `CreatureID` mediumint unsigned NOT NULL DEFAULT '0',
+  `ID` tinyint unsigned NOT NULL DEFAULT '1',
+  `ItemID1` mediumint unsigned NOT NULL DEFAULT '0',
+  `ItemID2` mediumint unsigned NOT NULL DEFAULT '0',
+  `ItemID3` mediumint unsigned NOT NULL DEFAULT '0',
+  `VerifiedBuild` smallint DEFAULT '0',
   PRIMARY KEY (`CreatureID`,`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.creature_equip_template: 10 755 rows
+-- Dumpar data för tabell acore_world.creature_equip_template: 10 759 rows
 DELETE FROM `creature_equip_template`;
 /*!40000 ALTER TABLE `creature_equip_template` DISABLE KEYS */;
 INSERT INTO `creature_equip_template` (`CreatureID`, `ID`, `ItemID1`, `ItemID2`, `ItemID3`, `VerifiedBuild`) VALUES
@@ -4715,7 +4715,7 @@ INSERT INTO `creature_equip_template` (`CreatureID`, `ID`, `ItemID1`, `ItemID2`,
 	(14186, 1, 18062, 0, 0, 18019),
 	(14187, 1, 13632, 0, 0, 18019),
 	(14188, 1, 12298, 12298, 0, 18019),
-	(14221, 1, 18983, 0, 0, 18019),
+	(14221, 1, 4560, 0, 0, 0),
 	(14225, 1, 23369, 0, 0, 18019),
 	(14226, 1, 11019, 0, 0, 18019),
 	(14230, 1, 13753, 0, 0, 18019),
@@ -10075,7 +10075,6 @@ INSERT INTO `creature_equip_template` (`CreatureID`, `ID`, `ItemID1`, `ItemID2`,
 	(34042, 1, 12182, 0, 0, 18019),
 	(34043, 1, 14836, 0, 0, 18019),
 	(34044, 1, 1903, 1910, 25972, 18019),
-	(34054, 1, 1903, 1910, 25972, 18019),
 	(34061, 1, 37123, 0, 0, 18019),
 	(34062, 1, 37123, 0, 0, 18019),
 	(34063, 1, 37123, 0, 0, 18019),
@@ -10783,7 +10782,12 @@ INSERT INTO `creature_equip_template` (`CreatureID`, `ID`, `ItemID1`, `ItemID2`,
 	(16334, 2, 2901, 0, 0, 0),
 	(16335, 2, 2901, 0, 0, 0),
 	(2621, 2, 5956, 12453, 0, 0),
-	(14849, 1, 2493, 0, 0, 0);
+	(14849, 1, 2493, 0, 0, 0),
+	(18488, 2, 27850, 27850, 0, 0),
+	(18488, 3, 27850, 27851, 0, 0),
+	(18488, 4, 27852, 0, 0, 0),
+	(17056, 2, 2202, 0, 0, 0),
+	(15951, 2, 12751, 0, 0, 0);
 /*!40000 ALTER TABLE `creature_equip_template` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

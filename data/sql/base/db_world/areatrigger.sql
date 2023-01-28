@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,23 +12,23 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.areatrigger
+-- Dumpar struktur för tabell acore_world.areatrigger
 DROP TABLE IF EXISTS `areatrigger`;
 CREATE TABLE IF NOT EXISTS `areatrigger` (
-  `entry` INT unsigned NOT NULL AUTO_INCREMENT,
-  `map` INT unsigned NOT NULL DEFAULT 0,
-  `x` float NOT NULL DEFAULT 0,
-  `y` float NOT NULL DEFAULT 0,
-  `z` float NOT NULL DEFAULT 0,
-  `radius` float NOT NULL DEFAULT 0 COMMENT 'Seems to be a box of size yards with center at x,y,z',
-  `length` float NOT NULL DEFAULT 0 COMMENT 'Most commonly used when size is 0, but not always',
-  `width` float NOT NULL DEFAULT 0 COMMENT 'Most commonly used when size is 0, but not always',
-  `height` float NOT NULL DEFAULT 0 COMMENT 'Most commonly used when size is 0, but not always',
-  `orientation` float NOT NULL DEFAULT 0 COMMENT 'Most commonly used when size is 0, but not always',
+  `entry` int unsigned NOT NULL AUTO_INCREMENT,
+  `map` int unsigned NOT NULL DEFAULT '0',
+  `x` float NOT NULL DEFAULT '0',
+  `y` float NOT NULL DEFAULT '0',
+  `z` float NOT NULL DEFAULT '0',
+  `radius` float NOT NULL DEFAULT '0' COMMENT 'Seems to be a box of size yards with center at x,y,z',
+  `length` float NOT NULL DEFAULT '0' COMMENT 'Most commonly used when size is 0, but not always',
+  `width` float NOT NULL DEFAULT '0' COMMENT 'Most commonly used when size is 0, but not always',
+  `height` float NOT NULL DEFAULT '0' COMMENT 'Most commonly used when size is 0, but not always',
+  `orientation` float NOT NULL DEFAULT '0' COMMENT 'Most commonly used when size is 0, but not always',
   PRIMARY KEY (`entry`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5873 DEFAULT CHARSET=latin1;
 
--- Дамп данных таблицы acore_world.areatrigger: ~1 217 rows (приблизительно)
+-- Dumpar data för tabell acore_world.areatrigger: ~1 217 rows (ungefär)
 DELETE FROM `areatrigger`;
 /*!40000 ALTER TABLE `areatrigger` DISABLE KEYS */;
 INSERT INTO `areatrigger` (`entry`, `map`, `x`, `y`, `z`, `radius`, `length`, `width`, `height`, `orientation`) VALUES

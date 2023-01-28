@@ -226,6 +226,7 @@ public:
         bool berserk{ false };
         bool bAchievCheese{ true };
         bool bAchievGettingCold{ true };
+        bool bAchievCacheRare{ true };
         bool bAchievCoolestFriends{ true };
         uint16 addSpawnTimer{ 0 };
 
@@ -240,6 +241,7 @@ public:
             berserk = false;
             bAchievCheese = true;
             bAchievGettingCold = true;
+            bAchievCacheRare = true;
             bAchievCoolestFriends = true;
             me->SetSheath(SHEATH_STATE_MELEE);
 
@@ -336,7 +338,7 @@ public:
             {
                 damage = 0;
                 me->SetReactState(REACT_PASSIVE);
-                if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+                if (!me->HasUnitFlag(UNIT_FLAG_NON_ATTACKABLE))
                 {
                     if (pInstance)
                     {
@@ -344,7 +346,7 @@ public:
                         me->CastSpell(me, 64899, true); // credit
                     }
 
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    me->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
                     me->SetFaction(FACTION_FRIENDLY);
                     me->GetMotionMaster()->Clear();
                     me->AttackStop();
@@ -423,6 +425,7 @@ public:
                 case EVENT_HARD_MODE_MISSED:
                     {
                         Talk(TEXT_HM_MISS);
+                        bAchievCacheRare = false;
                         if (pInstance)
                         {
                             if (GameObject* go = pInstance->instance->GetGameObject(pInstance->GetGuidData(GO_HODIR_CHEST_HARD)))
@@ -591,6 +594,8 @@ public:
                     return (bAchievCheese ? 1 : 0);
                 case 2:
                     return (bAchievGettingCold ? 1 : 0);
+                case 3:
+                    return (bAchievCacheRare ? 1 : 0);
                 case 4:
                     return (bAchievCoolestFriends ? 1 : 0);
             }
@@ -832,7 +837,8 @@ public:
         }
 
         void MoveInLineOfSight(Unit*  /*who*/) override {}
-        void EnterEvadeMode() override {}
+
+        void EnterEvadeMode(EvadeReason /*why*/) override {}
         bool CanAIAttack(Unit const* t) const override { return t->GetEntry() == NPC_HODIR; }
 
         void JustDied(Unit* /*killer*/) override
@@ -929,7 +935,8 @@ public:
         }
 
         void MoveInLineOfSight(Unit*  /*who*/) override {}
-        void EnterEvadeMode() override {}
+
+        void EnterEvadeMode(EvadeReason /*why*/) override {}
         bool CanAIAttack(Unit const* t) const override { return t->GetEntry() == NPC_HODIR; }
 
         void JustDied(Unit* /*killer*/) override
@@ -1029,7 +1036,8 @@ public:
         }
 
         void MoveInLineOfSight(Unit*  /*who*/) override {}
-        void EnterEvadeMode() override {}
+
+        void EnterEvadeMode(EvadeReason /*why*/) override {}
         bool CanAIAttack(Unit const* t) const override { return t->GetEntry() == NPC_HODIR; }
 
         void JustDied(Unit* /*killer*/) override
@@ -1144,7 +1152,8 @@ public:
         }
 
         void MoveInLineOfSight(Unit*  /*who*/) override {}
-        void EnterEvadeMode() override {}
+
+        void EnterEvadeMode(EvadeReason /*why*/) override {}
         bool CanAIAttack(Unit const* t) const override { return t->GetEntry() == NPC_HODIR; }
 
         void JustDied(Unit* /*killer*/) override

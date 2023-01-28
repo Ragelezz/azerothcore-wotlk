@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,26 +12,26 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.battleground_template
+-- Dumpar struktur för tabell acore_world.battleground_template
 DROP TABLE IF EXISTS `battleground_template`;
 CREATE TABLE IF NOT EXISTS `battleground_template` (
-  `ID` MEDIUMINT unsigned NOT NULL DEFAULT 0,
-  `MinPlayersPerTeam` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `MaxPlayersPerTeam` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `MinLvl` TINYINT unsigned NOT NULL DEFAULT 0,
-  `MaxLvl` TINYINT unsigned NOT NULL DEFAULT 0,
-  `AllianceStartLoc` MEDIUMINT unsigned NOT NULL,
+  `ID` mediumint unsigned NOT NULL DEFAULT '0',
+  `MinPlayersPerTeam` smallint unsigned NOT NULL DEFAULT '0',
+  `MaxPlayersPerTeam` smallint unsigned NOT NULL DEFAULT '0',
+  `MinLvl` tinyint unsigned NOT NULL DEFAULT '0',
+  `MaxLvl` tinyint unsigned NOT NULL DEFAULT '0',
+  `AllianceStartLoc` mediumint unsigned NOT NULL,
   `AllianceStartO` float NOT NULL,
-  `HordeStartLoc` MEDIUMINT unsigned NOT NULL,
+  `HordeStartLoc` mediumint unsigned NOT NULL,
   `HordeStartO` float NOT NULL,
-  `StartMaxDist` float NOT NULL DEFAULT 0,
-  `Weight` TINYINT unsigned NOT NULL DEFAULT 1,
+  `StartMaxDist` float NOT NULL DEFAULT '0',
+  `Weight` tinyint unsigned NOT NULL DEFAULT '1',
   `ScriptName` char(64) NOT NULL DEFAULT '',
   `Comment` char(38) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.battleground_template: 13 rows
+-- Dumpar data för tabell acore_world.battleground_template: 13 rows
 DELETE FROM `battleground_template`;
 /*!40000 ALTER TABLE `battleground_template` DISABLE KEYS */;
 INSERT INTO `battleground_template` (`ID`, `MinPlayersPerTeam`, `MaxPlayersPerTeam`, `MinLvl`, `MaxLvl`, `AllianceStartLoc`, `AllianceStartO`, `HordeStartLoc`, `HordeStartO`, `StartMaxDist`, `Weight`, `ScriptName`, `Comment`) VALUES

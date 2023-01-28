@@ -20,6 +20,7 @@
 #include "DatabaseEnv.h"
 #include "Log.h"
 #include "MapMgr.h"
+#include "ScriptMgr.h"
 
 Graveyard* Graveyard::instance()
 {
@@ -36,7 +37,7 @@ void Graveyard::LoadGraveyardFromDB()
     QueryResult result = WorldDatabase.Query("SELECT ID, Map, x, y, z, Comment FROM game_graveyard");
     if (!result)
     {
-        LOG_INFO("server.loading", ">> Loaded 0 graveyard. Table `game_graveyard` is empty!");
+        LOG_WARN("server.loading", ">> Loaded 0 graveyard. Table `game_graveyard` is empty!");
         LOG_INFO("server.loading", " ");
         return;
     }
@@ -69,7 +70,7 @@ void Graveyard::LoadGraveyardFromDB()
         ++Count;
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded {} graveyard in {} ms", Count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded {} Graveyard in {} ms", Count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", " ");
 }
 
@@ -95,6 +96,13 @@ GraveyardStruct const* Graveyard::GetDefaultGraveyard(TeamId teamId)
 
 GraveyardStruct const* Graveyard::GetClosestGraveyard(Player* player, TeamId teamId, bool nearCorpse)
 {
+    uint32 graveyardOverride = 0;
+    sScriptMgr->OnBeforeChooseGraveyard(player, teamId, nearCorpse, graveyardOverride);
+    if (graveyardOverride)
+    {
+        return sGraveyard->GetGraveyard(graveyardOverride);
+    }
+
     WorldLocation loc = player->GetWorldLocation();
 
     if (nearCorpse)
@@ -362,7 +370,7 @@ void Graveyard::LoadGraveyardZones()
 
     if (!result)
     {
-        LOG_INFO("server.loading", ">> Loaded 0 graveyard-zone links. DB table `graveyard_zone` is empty.");
+        LOG_WARN("server.loading", ">> Loaded 0 Graveyard-Zone Links. DB Table `graveyard_zone` Is Empty.");
         LOG_INFO("server.loading", " ");
         return;
     }
@@ -404,7 +412,7 @@ void Graveyard::LoadGraveyardZones()
             LOG_ERROR("sql.sql", "Table `graveyard_zone` has a duplicate record for Graveyard (ID: {}) and Zone (ID: {}), skipped.", safeLocId, zoneId);
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded {} graveyard-zone links in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded {} Graveyard-Zone Links in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", " ");
 }
 
@@ -424,7 +432,7 @@ GraveyardStruct const* Graveyard::GetGraveyard(const std::string& name) const
     {
         if (itr->second.wnameLow == wname)
             return &itr->second;
-        else if (alt == nullptr && itr->second.wnameLow.find(wname) != std::wstring::npos)
+        else if (!alt && itr->second.wnameLow.find(wname) != std::wstring::npos)
             alt = &itr->second;
     }
 

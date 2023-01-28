@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,28 +12,28 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_characters.arena_team
+-- Dumpar struktur för tabell acore_characters.arena_team
 DROP TABLE IF EXISTS `arena_team`;
 CREATE TABLE IF NOT EXISTS `arena_team` (
-  `arenaTeamId` INT unsigned NOT NULL DEFAULT 0,
+  `arenaTeamId` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(24) NOT NULL,
-  `captainGuid` INT unsigned NOT NULL DEFAULT 0,
-  `type` TINYINT unsigned NOT NULL DEFAULT 0,
-  `rating` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `seasonGames` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `seasonWins` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `weekGames` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `weekWins` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `rank` INT unsigned NOT NULL DEFAULT 0,
-  `backgroundColor` INT unsigned NOT NULL DEFAULT 0,
-  `emblemStyle` TINYINT unsigned NOT NULL DEFAULT 0,
-  `emblemColor` INT unsigned NOT NULL DEFAULT 0,
-  `borderStyle` TINYINT unsigned NOT NULL DEFAULT 0,
-  `borderColor` INT unsigned NOT NULL DEFAULT 0,
+  `captainGuid` int unsigned NOT NULL DEFAULT '0',
+  `type` tinyint unsigned NOT NULL DEFAULT '0',
+  `rating` smallint unsigned NOT NULL DEFAULT '0',
+  `seasonGames` smallint unsigned NOT NULL DEFAULT '0',
+  `seasonWins` smallint unsigned NOT NULL DEFAULT '0',
+  `weekGames` smallint unsigned NOT NULL DEFAULT '0',
+  `weekWins` smallint unsigned NOT NULL DEFAULT '0',
+  `rank` int unsigned NOT NULL DEFAULT '0',
+  `backgroundColor` int unsigned NOT NULL DEFAULT '0',
+  `emblemStyle` tinyint unsigned NOT NULL DEFAULT '0',
+  `emblemColor` int unsigned NOT NULL DEFAULT '0',
+  `borderStyle` tinyint unsigned NOT NULL DEFAULT '0',
+  `borderColor` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`arenaTeamId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_characters.arena_team: ~0 rows (приблизительно)
+-- Dumpar data för tabell acore_characters.arena_team: ~0 rows (ungefär)
 DELETE FROM `arena_team`;
 /*!40000 ALTER TABLE `arena_team` DISABLE KEYS */;
 /*!40000 ALTER TABLE `arena_team` ENABLE KEYS */;

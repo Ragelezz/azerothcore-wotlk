@@ -65,11 +65,10 @@ public:
         {
             creature->CastSpell(player, SPELL_MARK_OF_BITE, true);
             player->KilledMonsterCredit(creature->GetEntry());
-            creature->DespawnOrUnsummon(1000);
         }
         else
         {
-            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
+            creature->SetImmuneToAll(false);
             Creature* cr;
             if ((cr = creature->SummonCreature(17957, -186, -790, 43.8f, 4.2f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000)))
                 cr->AI()->AttackStart(creature);

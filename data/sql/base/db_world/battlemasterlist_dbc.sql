@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,20 +12,20 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.battlemasterlist_dbc
+-- Dumpar struktur för tabell acore_world.battlemasterlist_dbc
 DROP TABLE IF EXISTS `battlemasterlist_dbc`;
 CREATE TABLE IF NOT EXISTS `battlemasterlist_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `MapID_1` INT NOT NULL DEFAULT 0,
-  `MapID_2` INT NOT NULL DEFAULT 0,
-  `MapID_3` INT NOT NULL DEFAULT 0,
-  `MapID_4` INT NOT NULL DEFAULT 0,
-  `MapID_5` INT NOT NULL DEFAULT 0,
-  `MapID_6` INT NOT NULL DEFAULT 0,
-  `MapID_7` INT NOT NULL DEFAULT 0,
-  `MapID_8` INT NOT NULL DEFAULT 0,
-  `InstanceType` INT NOT NULL DEFAULT 0,
-  `GroupsAllowed` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `MapID_1` int NOT NULL DEFAULT '0',
+  `MapID_2` int NOT NULL DEFAULT '0',
+  `MapID_3` int NOT NULL DEFAULT '0',
+  `MapID_4` int NOT NULL DEFAULT '0',
+  `MapID_5` int NOT NULL DEFAULT '0',
+  `MapID_6` int NOT NULL DEFAULT '0',
+  `MapID_7` int NOT NULL DEFAULT '0',
+  `MapID_8` int NOT NULL DEFAULT '0',
+  `InstanceType` int NOT NULL DEFAULT '0',
+  `GroupsAllowed` int NOT NULL DEFAULT '0',
   `Name_Lang_enUS` varchar(100) DEFAULT NULL,
   `Name_Lang_enGB` varchar(100) DEFAULT NULL,
   `Name_Lang_koKR` varchar(100) DEFAULT NULL,
@@ -42,15 +42,15 @@ CREATE TABLE IF NOT EXISTS `battlemasterlist_dbc` (
   `Name_Lang_ptBR` varchar(100) DEFAULT NULL,
   `Name_Lang_itIT` varchar(100) DEFAULT NULL,
   `Name_Lang_Unk` varchar(100) DEFAULT NULL,
-  `Name_Lang_Mask` INT unsigned NOT NULL DEFAULT 0,
-  `MaxGroupSize` INT NOT NULL DEFAULT 0,
-  `HolidayWorldState` INT NOT NULL DEFAULT 0,
-  `Minlevel` INT NOT NULL DEFAULT 0,
-  `Maxlevel` INT NOT NULL DEFAULT 0,
+  `Name_Lang_Mask` int unsigned NOT NULL DEFAULT '0',
+  `MaxGroupSize` int NOT NULL DEFAULT '0',
+  `HolidayWorldState` int NOT NULL DEFAULT '0',
+  `Minlevel` int NOT NULL DEFAULT '0',
+  `Maxlevel` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.battlemasterlist_dbc: 0 rows
+-- Dumpar data för tabell acore_world.battlemasterlist_dbc: 0 rows
 DELETE FROM `battlemasterlist_dbc`;
 /*!40000 ALTER TABLE `battlemasterlist_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlemasterlist_dbc` ENABLE KEYS */;

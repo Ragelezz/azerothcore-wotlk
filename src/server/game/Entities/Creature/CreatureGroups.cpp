@@ -86,7 +86,7 @@ void FormationMgr::LoadCreatureFormations()
     QueryResult result = WorldDatabase.Query("SELECT leaderGUID, memberGUID, dist, angle, groupAI, point_1, point_2 FROM creature_formations ORDER BY leaderGUID");
     if (!result)
     {
-        LOG_ERROR("sql.sql", ">>  Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        LOG_WARN("server.loading", ">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
         LOG_INFO("server.loading", " ");
         return;
     }
@@ -160,7 +160,7 @@ void FormationMgr::LoadCreatureFormations()
         ++count;
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded {} creatures in formations in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded {} Creatures In Formations in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", " ");
 }
 
@@ -190,7 +190,7 @@ void CreatureGroup::RemoveMember(Creature* member)
     member->SetFormation(nullptr);
 }
 
-void CreatureGroup::MemberAttackStart(Creature* member, Unit* target)
+void CreatureGroup::MemberEngagingTarget(Creature* member, Unit* target)
 {
     uint8 const groupAI = sFormationMgr->CreatureGroupMap[member->GetSpawnId()].groupAI;
     if (member == m_leader)
@@ -208,28 +208,79 @@ void CreatureGroup::MemberAttackStart(Creature* member, Unit* target)
     for (auto const& itr : m_members)
     {
         Creature* pMember = itr.first;
-        if (m_leader) // avoid crash if leader was killed and reset.
-            LOG_DEBUG("entities.unit", "GROUP ATTACK: group instance id {} calls member instid {}", m_leader->GetInstanceId(), member->GetInstanceId());
-
-        //Skip one check
-        if (pMember == member)
+        if (!pMember)
+        {
             continue;
+        }
 
-        if (!pMember->IsAlive())
+        if (pMember == member || !pMember->IsAlive() || pMember->GetVictim())
+        {
             continue;
+        }
 
-        if (pMember->GetVictim())
+        if (pMember == m_leader && !(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_LEADER_ASSIST_MEMBER)))
+        {
             continue;
+        }
 
         if (pMember->IsValidAttackTarget(target) && pMember->AI())
+        {
             pMember->AI()->AttackStart(target);
+        }
     }
+}
+
+Unit* CreatureGroup::GetNewTargetForMember(Creature* member)
+{
+    uint8 const groupAI = sFormationMgr->CreatureGroupMap[member->GetSpawnId()].groupAI;
+    if (!(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_ACQUIRE_NEW_TARGET_ON_EVADE)))
+    {
+        return nullptr;
+    }
+
+    if (member == m_leader)
+    {
+        if (!(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_MEMBER_ASSIST_LEADER)))
+        {
+            return nullptr;
+        }
+    }
+    else if (!(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_LEADER_ASSIST_MEMBER)))
+    {
+        return nullptr;
+    }
+
+    for (auto const& itr : m_members)
+    {
+        Creature* pMember = itr.first;
+        if (!pMember)
+        {
+            continue;
+        }
+
+        if (pMember == member || !pMember->IsAlive() || !pMember->GetVictim())
+        {
+            continue;
+        }
+
+        if (pMember == m_leader && !(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_MEMBER_ASSIST_LEADER)))
+        {
+            continue;
+        }
+
+        if (member->IsValidAttackTarget(pMember->GetVictim()))
+        {
+            return pMember->GetVictim();
+        }
+    }
+
+    return nullptr;
 }
 
 void CreatureGroup::MemberEvaded(Creature* member)
 {
     uint8 const groupAI = sFormationMgr->CreatureGroupMap[member->GetSpawnId()].groupAI;
-    if (!(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_EVADE_TOGETHER)))
+    if (!(groupAI & std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_EVADE_MASK)))
     {
         return;
     }
@@ -243,18 +294,39 @@ void CreatureGroup::MemberEvaded(Creature* member)
             continue;
         }
 
-        if (pMember == member || pMember->isDead() || pMember->IsInEvadeMode() || !pMember->IsInCombat() ||
-                !itr.second.HasGroupFlag(std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_EVADE_TOGETHER)))
+        if (pMember == member || pMember->IsInEvadeMode() || !itr.second.HasGroupFlag(std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_EVADE_MASK)))
         {
             continue;
         }
 
-        if (pMember->IsAIEnabled)
+        if (itr.second.HasGroupFlag(std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_EVADE_TOGETHER)))
         {
-            if (CreatureAI* pMemberAI = pMember->AI())
+            if (!pMember->IsAlive() || !pMember->IsInCombat())
             {
-                pMemberAI->EnterEvadeMode();
+                continue;
             }
+
+            if (pMember->IsAIEnabled)
+            {
+                if (CreatureAI* pMemberAI = pMember->AI())
+                {
+                    pMemberAI->EnterEvadeMode();
+                }
+            }
+        }
+        else
+        {
+            if (pMember->IsAlive())
+            {
+                continue;
+            }
+
+            if (itr.second.HasGroupFlag(std::underlying_type_t<GroupAIFlags>(GroupAIFlags::GROUP_AI_FLAG_DONT_RESPAWN_LEADER_ON_EVADE)) && pMember == m_leader)
+            {
+                continue;
+            }
+
+            pMember->Respawn();
         }
     }
 }
@@ -359,4 +431,44 @@ void CreatureGroup::LeaderMoveTo(float x, float y, float z, bool run)
             member->SetHomePosition(dx, dy, dz, pathAngle);
         }
     }
+}
+
+void CreatureGroup::RespawnFormation(bool force)
+{
+    for (auto const& itr : m_members)
+    {
+        if (itr.first && !itr.first->IsAlive())
+        {
+            itr.first->Respawn(force);
+        }
+    }
+}
+
+bool CreatureGroup::IsFormationInCombat()
+{
+    for (auto const& itr : m_members)
+    {
+        if (itr.first && itr.first->IsInCombat())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CreatureGroup::IsAnyMemberAlive(bool ignoreLeader /*= false*/)
+{
+    for (auto const& itr : m_members)
+    {
+        if (itr.first && itr.first->IsAlive())
+        {
+            if (!ignoreLeader || itr.first != m_leader)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

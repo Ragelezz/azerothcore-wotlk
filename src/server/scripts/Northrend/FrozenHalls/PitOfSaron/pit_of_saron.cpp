@@ -701,7 +701,7 @@ public:
                         {
                             deathbringerGUID[0] = c->GetGUID();
                             c->SetReactState(REACT_PASSIVE);
-                            c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                            c->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
                             c->SetHomePosition(915.10f, 75.31f, 553.81f, 3.75f);
                             c->SetWalk(false);
                             c->GetMotionMaster()->MoveSplinePath(&path);
@@ -710,7 +710,7 @@ public:
                         {
                             deathbringerGUID[1] = c->GetGUID();
                             c->SetReactState(REACT_PASSIVE);
-                            c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                            c->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
                             c->SetHomePosition(883.15f, 54.6254f, 528.5f, 3.75f);
                             c->SetWalk(false);
                             path.push_back(G3D::Vector3(883.15f, 54.6254f, 528.5f));
@@ -758,14 +758,14 @@ public:
                     if (Creature* c = pInstance->instance->GetCreature(deathbringerGUID[0]))
                     {
                         c->SetReactState(REACT_AGGRESSIVE);
-                        c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        c->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
                     }
                     break;
                 case 36:
                     if (Creature* c = pInstance->instance->GetCreature(deathbringerGUID[1]))
                     {
                         c->SetReactState(REACT_AGGRESSIVE);
-                        c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        c->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
                     }
                     break;
                 case 60:
@@ -930,7 +930,7 @@ public:
                 if (Creature* c = pInstance->instance->GetCreature(pInstance->GetGuidData(DATA_TYRANNUS_GUID)))
                 {
                     c->AI()->Talk(SAY_PREFIGHT_1);
-                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+                    c->SetImmuneToPC(false);
                     c->SetReactState(REACT_AGGRESSIVE);
                     //c->ClearUnitState(UNIT_STATE_ONVEHICLE);
                     if (Player* plr = c->SelectNearestPlayer(100.0f))
@@ -1106,7 +1106,7 @@ public:
     {
         npc_pos_freed_slaveAI(Creature* creature) : SmartAI(creature)
         {
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+            me->SetUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
             // immune to falling icicles
             me->ApplySpellImmune(0, IMMUNITY_ID, 69425, true);
             me->ApplySpellImmune(0, IMMUNITY_ID, 70827, true);
@@ -1117,13 +1117,13 @@ public:
             return who->GetEntry() == NPC_FALLEN_WARRIOR;
         }
 
-        void EnterEvadeMode() override
+        void EnterEvadeMode(EvadeReason /* why */) override
         {
             if (!me->IsAlive() || me->IsInEvadeMode())
                 return;
 
             me->RemoveEvadeAuras();
-            me->DeleteThreatList();
+            me->GetThreatMgr().ClearAllThreat();
             me->CombatStop(true);
             me->LoadCreaturesAddon(true);
             me->SetLootRecipient(nullptr);
@@ -1150,7 +1150,7 @@ public:
             pInstance = me->GetInstanceScript();
             barrierGUID.Clear();
             events.Reset();
-            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            me->RemoveNpcFlag(UNIT_NPC_FLAG_QUESTGIVER);
 
             if (pInstance)
             {
@@ -1206,7 +1206,7 @@ public:
                         Talk(SAY_JAINA_OUTRO_3);
                     break;
                 case 6:
-                    me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    me->SetNpcFlag(UNIT_NPC_FLAG_QUESTGIVER);
                     if (GameObject* g = me->FindNearestGameObject(GO_HOR_PORTCULLIS, 50.0f))
                         g->SetGoState(GO_STATE_ACTIVE);
                     break;
@@ -1294,48 +1294,6 @@ public:
     CreatureAI* GetAI(Creature* creature) const override
     {
         return GetPitOfSaronAI<npc_pos_leader_secondAI>(creature);
-    }
-};
-
-class npc_frostbite_invisible_stalker : public CreatureScript
-{
-public:
-    npc_frostbite_invisible_stalker() : CreatureScript("npc_frostbite_invisible_stalker") { }
-
-    struct npc_frostbite_invisible_stalkerAI: public NullCreatureAI
-    {
-        npc_frostbite_invisible_stalkerAI(Creature* creature) : NullCreatureAI(creature)
-        {
-            timer = 3500;
-            for (uint8 i = 0; i < 3; ++i)
-            {
-                me->SetOrientation(i * M_PI / 3);
-                me->CastSpell(me, 34740, true);
-                me->CastSpell(me, 34746, true);
-            }
-        }
-
-        uint16 timer;
-
-        void UpdateAI(uint32 diff) override
-        {
-            if (timer)
-            {
-                if (timer <= diff)
-                {
-                    int32 dmg = 2200;
-                    me->CastCustomSpell(me, 34779, 0, &dmg, 0, true);
-                    timer = 0;
-                }
-                else
-                    timer -= diff;
-            }
-        }
-    };
-
-    CreatureAI* GetAI(Creature* creature) const override
-    {
-        return GetPitOfSaronAI<npc_frostbite_invisible_stalkerAI>(creature);
     }
 };
 
@@ -1574,7 +1532,6 @@ void AddSC_pit_of_saron()
     new npc_pos_martin_or_gorkun_second();
     new npc_pos_freed_slave();
     new npc_pos_leader_second();
-    new npc_frostbite_invisible_stalker();
 
     new spell_pos_empowered_blizzard();
     new spell_pos_slave_trigger_closest();

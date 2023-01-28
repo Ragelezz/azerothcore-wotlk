@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,29 +12,29 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.spell_proc
+-- Dumpar struktur för tabell acore_world.spell_proc
 DROP TABLE IF EXISTS `spell_proc`;
 CREATE TABLE IF NOT EXISTS `spell_proc` (
-  `spellId` MEDIUMINT NOT NULL DEFAULT 0,
-  `schoolMask` TINYINT NOT NULL DEFAULT 0,
-  `spellFamilyName` SMALLINT unsigned NOT NULL DEFAULT 0,
-  `spellFamilyMask0` INT unsigned NOT NULL DEFAULT 0,
-  `spellFamilyMask1` INT unsigned NOT NULL DEFAULT 0,
-  `spellFamilyMask2` INT unsigned NOT NULL DEFAULT 0,
-  `typeMask` INT unsigned NOT NULL DEFAULT 0,
-  `spellTypeMask` INT unsigned NOT NULL DEFAULT 0,
-  `spellPhaseMask` INT NOT NULL DEFAULT 0,
-  `hitMask` INT NOT NULL DEFAULT 0,
-  `attributesMask` INT unsigned NOT NULL DEFAULT 0,
-  `ratePerMinute` float NOT NULL DEFAULT 0,
-  `chance` float NOT NULL DEFAULT 0,
-  `cooldown` float NOT NULL DEFAULT 0,
-  `charges` INT unsigned NOT NULL DEFAULT 0,
+  `spellId` mediumint NOT NULL DEFAULT '0',
+  `schoolMask` tinyint NOT NULL DEFAULT '0',
+  `spellFamilyName` smallint unsigned NOT NULL DEFAULT '0',
+  `spellFamilyMask0` int unsigned NOT NULL DEFAULT '0',
+  `spellFamilyMask1` int unsigned NOT NULL DEFAULT '0',
+  `spellFamilyMask2` int unsigned NOT NULL DEFAULT '0',
+  `typeMask` int unsigned NOT NULL DEFAULT '0',
+  `spellTypeMask` int unsigned NOT NULL DEFAULT '0',
+  `spellPhaseMask` int NOT NULL DEFAULT '0',
+  `hitMask` int NOT NULL DEFAULT '0',
+  `attributesMask` int unsigned NOT NULL DEFAULT '0',
+  `ratePerMinute` float NOT NULL DEFAULT '0',
+  `chance` float NOT NULL DEFAULT '0',
+  `cooldown` float NOT NULL DEFAULT '0',
+  `charges` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`spellId`),
-  CHECK (`cooldown` >= 0)
+  CONSTRAINT `spell_proc_chk_1` CHECK ((`cooldown` >= 0))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.spell_proc: 0 rows
+-- Dumpar data för tabell acore_world.spell_proc: 0 rows
 DELETE FROM `spell_proc`;
 /*!40000 ALTER TABLE `spell_proc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `spell_proc` ENABLE KEYS */;

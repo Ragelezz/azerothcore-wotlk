@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,43 +12,43 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.durabilitycosts_dbc
+-- Dumpar struktur för tabell acore_world.durabilitycosts_dbc
 DROP TABLE IF EXISTS `durabilitycosts_dbc`;
 CREATE TABLE IF NOT EXISTS `durabilitycosts_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_1` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_2` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_3` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_4` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_5` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_6` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_7` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_8` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_9` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_10` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_11` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_12` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_13` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_14` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_15` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_16` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_17` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_18` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_19` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_20` INT NOT NULL DEFAULT 0,
-  `WeaponSubClassCost_21` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_1` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_2` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_3` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_4` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_5` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_6` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_7` INT NOT NULL DEFAULT 0,
-  `ArmorSubClassCost_8` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_1` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_2` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_3` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_4` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_5` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_6` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_7` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_8` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_9` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_10` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_11` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_12` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_13` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_14` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_15` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_16` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_17` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_18` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_19` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_20` int NOT NULL DEFAULT '0',
+  `WeaponSubClassCost_21` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_1` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_2` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_3` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_4` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_5` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_6` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_7` int NOT NULL DEFAULT '0',
+  `ArmorSubClassCost_8` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.durabilitycosts_dbc: 0 rows
+-- Dumpar data för tabell acore_world.durabilitycosts_dbc: 0 rows
 DELETE FROM `durabilitycosts_dbc`;
 /*!40000 ALTER TABLE `durabilitycosts_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `durabilitycosts_dbc` ENABLE KEYS */;

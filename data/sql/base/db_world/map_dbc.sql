@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,14 +12,14 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.map_dbc
+-- Dumpar struktur för tabell acore_world.map_dbc
 DROP TABLE IF EXISTS `map_dbc`;
 CREATE TABLE IF NOT EXISTS `map_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
   `Directory` varchar(100) DEFAULT NULL,
-  `InstanceType` INT NOT NULL DEFAULT 0,
-  `Flags` INT NOT NULL DEFAULT 0,
-  `PVP` INT NOT NULL DEFAULT 0,
+  `InstanceType` int NOT NULL DEFAULT '0',
+  `Flags` int NOT NULL DEFAULT '0',
+  `PVP` int NOT NULL DEFAULT '0',
   `MapName_Lang_enUS` varchar(100) DEFAULT NULL,
   `MapName_Lang_enGB` varchar(100) DEFAULT NULL,
   `MapName_Lang_koKR` varchar(100) DEFAULT NULL,
@@ -36,55 +36,55 @@ CREATE TABLE IF NOT EXISTS `map_dbc` (
   `MapName_Lang_ptBR` varchar(100) DEFAULT NULL,
   `MapName_Lang_itIT` varchar(100) DEFAULT NULL,
   `MapName_Lang_Unk` varchar(100) DEFAULT NULL,
-  `MapName_Lang_Mask` INT unsigned NOT NULL DEFAULT 0,
-  `AreaTableID` INT NOT NULL DEFAULT 0,
-  `MapDescription0_Lang_enUS` text DEFAULT NULL,
-  `MapDescription0_Lang_enGB` text DEFAULT NULL,
-  `MapDescription0_Lang_koKR` text DEFAULT NULL,
-  `MapDescription0_Lang_frFR` text DEFAULT NULL,
-  `MapDescription0_Lang_deDE` text DEFAULT NULL,
-  `MapDescription0_Lang_enCN` text DEFAULT NULL,
-  `MapDescription0_Lang_zhCN` text DEFAULT NULL,
-  `MapDescription0_Lang_enTW` text DEFAULT NULL,
-  `MapDescription0_Lang_zhTW` text DEFAULT NULL,
-  `MapDescription0_Lang_esES` text DEFAULT NULL,
-  `MapDescription0_Lang_esMX` text DEFAULT NULL,
-  `MapDescription0_Lang_ruRU` text DEFAULT NULL,
-  `MapDescription0_Lang_ptPT` text DEFAULT NULL,
-  `MapDescription0_Lang_ptBR` text DEFAULT NULL,
-  `MapDescription0_Lang_itIT` text DEFAULT NULL,
+  `MapName_Lang_Mask` int unsigned NOT NULL DEFAULT '0',
+  `AreaTableID` int NOT NULL DEFAULT '0',
+  `MapDescription0_Lang_enUS` text,
+  `MapDescription0_Lang_enGB` text,
+  `MapDescription0_Lang_koKR` text,
+  `MapDescription0_Lang_frFR` text,
+  `MapDescription0_Lang_deDE` text,
+  `MapDescription0_Lang_enCN` text,
+  `MapDescription0_Lang_zhCN` text,
+  `MapDescription0_Lang_enTW` text,
+  `MapDescription0_Lang_zhTW` text,
+  `MapDescription0_Lang_esES` text,
+  `MapDescription0_Lang_esMX` text,
+  `MapDescription0_Lang_ruRU` text,
+  `MapDescription0_Lang_ptPT` text,
+  `MapDescription0_Lang_ptBR` text,
+  `MapDescription0_Lang_itIT` text,
   `MapDescription0_Lang_Unk` varchar(100) DEFAULT NULL,
-  `MapDescription0_Lang_Mask` INT unsigned NOT NULL DEFAULT 0,
-  `MapDescription1_Lang_enUS` text DEFAULT NULL,
-  `MapDescription1_Lang_enGB` text DEFAULT NULL,
-  `MapDescription1_Lang_koKR` text DEFAULT NULL,
-  `MapDescription1_Lang_frFR` text DEFAULT NULL,
-  `MapDescription1_Lang_deDE` text DEFAULT NULL,
-  `MapDescription1_Lang_enCN` text DEFAULT NULL,
-  `MapDescription1_Lang_zhCN` text DEFAULT NULL,
-  `MapDescription1_Lang_enTW` text DEFAULT NULL,
-  `MapDescription1_Lang_zhTW` text DEFAULT NULL,
-  `MapDescription1_Lang_esES` text DEFAULT NULL,
-  `MapDescription1_Lang_esMX` text DEFAULT NULL,
-  `MapDescription1_Lang_ruRU` text DEFAULT NULL,
-  `MapDescription1_Lang_ptPT` text DEFAULT NULL,
-  `MapDescription1_Lang_ptBR` text DEFAULT NULL,
-  `MapDescription1_Lang_itIT` text DEFAULT NULL,
+  `MapDescription0_Lang_Mask` int unsigned NOT NULL DEFAULT '0',
+  `MapDescription1_Lang_enUS` text,
+  `MapDescription1_Lang_enGB` text,
+  `MapDescription1_Lang_koKR` text,
+  `MapDescription1_Lang_frFR` text,
+  `MapDescription1_Lang_deDE` text,
+  `MapDescription1_Lang_enCN` text,
+  `MapDescription1_Lang_zhCN` text,
+  `MapDescription1_Lang_enTW` text,
+  `MapDescription1_Lang_zhTW` text,
+  `MapDescription1_Lang_esES` text,
+  `MapDescription1_Lang_esMX` text,
+  `MapDescription1_Lang_ruRU` text,
+  `MapDescription1_Lang_ptPT` text,
+  `MapDescription1_Lang_ptBR` text,
+  `MapDescription1_Lang_itIT` text,
   `MapDescription1_Lang_Unk` varchar(100) DEFAULT NULL,
-  `MapDescription1_Lang_Mask` INT unsigned NOT NULL DEFAULT 0,
-  `LoadingScreenID` INT NOT NULL DEFAULT 0,
-  `MinimapIconScale` float NOT NULL DEFAULT 0,
-  `CorpseMapID` INT NOT NULL DEFAULT 0,
-  `CorpseX` float NOT NULL DEFAULT 0,
-  `CorpseY` float NOT NULL DEFAULT 0,
-  `TimeOfDayOverride` INT NOT NULL DEFAULT 0,
-  `ExpansionID` INT NOT NULL DEFAULT 0,
-  `RaidOffset` INT NOT NULL DEFAULT 0,
-  `MaxPlayers` INT NOT NULL DEFAULT 0,
+  `MapDescription1_Lang_Mask` int unsigned NOT NULL DEFAULT '0',
+  `LoadingScreenID` int NOT NULL DEFAULT '0',
+  `MinimapIconScale` float NOT NULL DEFAULT '0',
+  `CorpseMapID` int NOT NULL DEFAULT '0',
+  `CorpseX` float NOT NULL DEFAULT '0',
+  `CorpseY` float NOT NULL DEFAULT '0',
+  `TimeOfDayOverride` int NOT NULL DEFAULT '0',
+  `ExpansionID` int NOT NULL DEFAULT '0',
+  `RaidOffset` int NOT NULL DEFAULT '0',
+  `MaxPlayers` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.map_dbc: 0 rows
+-- Dumpar data för tabell acore_world.map_dbc: 0 rows
 DELETE FROM `map_dbc`;
 /*!40000 ALTER TABLE `map_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `map_dbc` ENABLE KEYS */;

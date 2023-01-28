@@ -116,7 +116,7 @@ public:
 
         player->SetByteValue(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_PVP);
 
-        player->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+        player->ReplaceAllUnitFlags(UNIT_FLAG_PLAYER_CONTROLLED);
 
         //-1 is default value
         player->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
@@ -132,7 +132,7 @@ public:
         if (!HandleResetStatsOrLevelHelper(target))
             return false;
 
-        uint8 oldLevel = target->getLevel();
+        uint8 oldLevel = target->GetLevel();
 
         // set starting level
         uint32 startLevel = target->getClass() != CLASS_DEATH_KNIGHT
@@ -252,7 +252,7 @@ public:
         else if (targetGuid)
         {
             CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ADD_AT_LOGIN_FLAG);
-            stmt->SetData(0, uint16(AT_LOGIN_NONE | AT_LOGIN_RESET_PET_TALENTS));
+            stmt->SetData(0, uint16(AT_LOGIN_RESET_TALENTS | AT_LOGIN_RESET_PET_TALENTS));
             stmt->SetData(1, targetGuid.GetCounter());
             CharacterDatabase.Execute(stmt);
 

@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,17 +12,17 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.spell_pet_auras
+-- Dumpar struktur för tabell acore_world.spell_pet_auras
 DROP TABLE IF EXISTS `spell_pet_auras`;
 CREATE TABLE IF NOT EXISTS `spell_pet_auras` (
-  `spell` MEDIUMINT unsigned NOT NULL COMMENT 'dummy spell id',
-  `effectId` TINYINT unsigned NOT NULL DEFAULT 0,
-  `pet` MEDIUMINT unsigned NOT NULL DEFAULT 0 COMMENT 'pet id; 0 = all',
-  `aura` MEDIUMINT unsigned NOT NULL COMMENT 'pet aura id',
+  `spell` mediumint unsigned NOT NULL COMMENT 'dummy spell id',
+  `effectId` tinyint unsigned NOT NULL DEFAULT '0',
+  `pet` mediumint unsigned NOT NULL DEFAULT '0' COMMENT 'pet id; 0 = all',
+  `aura` mediumint unsigned NOT NULL COMMENT 'pet aura id',
   PRIMARY KEY (`spell`,`effectId`,`pet`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.spell_pet_auras: 49 rows
+-- Dumpar data för tabell acore_world.spell_pet_auras: 49 rows
 DELETE FROM `spell_pet_auras`;
 /*!40000 ALTER TABLE `spell_pet_auras` DISABLE KEYS */;
 INSERT INTO `spell_pet_auras` (`spell`, `effectId`, `pet`, `aura`) VALUES

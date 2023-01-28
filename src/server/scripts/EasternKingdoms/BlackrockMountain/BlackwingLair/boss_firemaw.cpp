@@ -46,7 +46,7 @@ public:
         {
             BossAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SHADOWFLAME, 10000, 20000);
+            events.ScheduleEvent(EVENT_SHADOWFLAME, 18000);
             events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
             events.ScheduleEvent(EVENT_FLAMEBUFFET, 5000);
         }
@@ -67,12 +67,12 @@ public:
                 {
                     case EVENT_SHADOWFLAME:
                         DoCastVictim(SPELL_SHADOWFLAME);
-                        events.ScheduleEvent(EVENT_SHADOWFLAME, 10000, 20000);
+                        events.ScheduleEvent(EVENT_SHADOWFLAME, urand(15000, 25000));
                         break;
                     case EVENT_WINGBUFFET:
                         DoCastVictim(SPELL_WINGBUFFET);
                         if (DoGetThreat(me->GetVictim()))
-                            DoModifyThreatPercent(me->GetVictim(), -75);
+                            DoModifyThreatByPercent(me->GetVictim(), -75);
                         events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
                         break;
                     case EVENT_FLAMEBUFFET:

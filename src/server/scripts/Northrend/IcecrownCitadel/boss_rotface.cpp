@@ -151,7 +151,7 @@ public:
         {
             if (!instance->CheckRequiredBosses(DATA_ROTFACE, who->ToPlayer()))
             {
-                EnterEvadeMode();
+                EnterEvadeMode(EVADE_REASON_OTHER);
                 instance->DoCastSpellOnPlayers(LIGHT_S_HAMMER_TELEPORT);
                 return;
             }
@@ -219,13 +219,13 @@ public:
                 Talk(SAY_KILL);
         }
 
-        void EnterEvadeMode() override
+        void EnterEvadeMode(EvadeReason why) override
         {
             me->SetControlled(false, UNIT_STATE_ROOT);
             me->DisableRotate(false);
-            ScriptedAI::EnterEvadeMode();
+            ScriptedAI::EnterEvadeMode(why);
             if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PROFESSOR_PUTRICIDE)))
-                professor->AI()->EnterEvadeMode();
+                professor->AI()->EnterEvadeMode(why);
         }
 
         void SpellHitTarget(Unit* target, SpellInfo const* spell) override
@@ -258,7 +258,7 @@ public:
 
         void UpdateAI(uint32 diff) override
         {
-            if (!UpdateVictim() || !CheckInRoom())
+            if (!UpdateVictim())
                 return;
 
             events.Update(diff);
@@ -315,7 +315,7 @@ public:
                     {
                         std::list<Unit*> targets;
                         uint32 minTargets = RAID_MODE<uint32>(3, 8, 3, 8);
-                        SelectTargetList(targets, minTargets, SelectTargetMethod::Random, -5.0f, true);
+                        SelectTargetList(targets, minTargets, SelectTargetMethod::Random, 0, -5.0f, true);
                         float minDist = 0.0f;
                         if (targets.size() >= minTargets)
                             minDist = -5.0f;
@@ -383,7 +383,7 @@ public:
                 me->CastSpell(me, SPELL_WEAK_RADIATING_OOZE, true);
                 events.Reset();
                 events.ScheduleEvent(EVENT_STICKY_OOZE, 5000);
-                DoResetThreat();
+                DoResetThreatList();
                 me->SetInCombatWithZone();
                 if (TempSummon* ts = me->ToTempSummon())
                     if (Unit* summoner = ts->GetSummonerUnit())
@@ -407,7 +407,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void EnterEvadeMode() override
+        void EnterEvadeMode(EvadeReason /*why*/) override
         {
             me->SetInCombatWithZone();
         }
@@ -468,7 +468,7 @@ public:
                 me->CastSpell(me, SPELL_GREEN_ABOMINATION_HITTIN__YA_PROC, true);
                 events.Reset();
                 events.ScheduleEvent(EVENT_STICKY_OOZE, 5000);
-                DoResetThreat();
+                DoResetThreatList();
                 me->SetInCombatWithZone();
                 if (Player* p = me->SelectNearestPlayer(100.0f))
                     AttackStart(p);
@@ -492,7 +492,7 @@ public:
                 DoMeleeAttackIfReady();
         }
 
-        void EnterEvadeMode() override
+        void EnterEvadeMode(EvadeReason /*why*/) override
         {
             me->SetInCombatWithZone();
         }

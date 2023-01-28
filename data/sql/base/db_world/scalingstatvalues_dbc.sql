@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,37 +12,37 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.scalingstatvalues_dbc
+-- Dumpar struktur för tabell acore_world.scalingstatvalues_dbc
 DROP TABLE IF EXISTS `scalingstatvalues_dbc`;
 CREATE TABLE IF NOT EXISTS `scalingstatvalues_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `Charlevel` INT NOT NULL DEFAULT 0,
-  `ShoulderBudget` INT NOT NULL DEFAULT 0,
-  `TrinketBudget` INT NOT NULL DEFAULT 0,
-  `WeaponBudget1H` INT NOT NULL DEFAULT 0,
-  `RangedBudget` INT NOT NULL DEFAULT 0,
-  `ClothShoulderArmor` INT NOT NULL DEFAULT 0,
-  `LeatherShoulderArmor` INT NOT NULL DEFAULT 0,
-  `MailShoulderArmor` INT NOT NULL DEFAULT 0,
-  `PlateShoulderArmor` INT NOT NULL DEFAULT 0,
-  `WeaponDPS1H` INT NOT NULL DEFAULT 0,
-  `WeaponDPS2H` INT NOT NULL DEFAULT 0,
-  `SpellcasterDPS1H` INT NOT NULL DEFAULT 0,
-  `SpellcasterDPS2H` INT NOT NULL DEFAULT 0,
-  `RangedDPS` INT NOT NULL DEFAULT 0,
-  `WandDPS` INT NOT NULL DEFAULT 0,
-  `SpellPower` INT NOT NULL DEFAULT 0,
-  `PrimaryBudget` INT NOT NULL DEFAULT 0,
-  `TertiaryBudget` INT NOT NULL DEFAULT 0,
-  `ClothCloakArmor` INT NOT NULL DEFAULT 0,
-  `ClothChestArmor` INT NOT NULL DEFAULT 0,
-  `LeatherChestArmor` INT NOT NULL DEFAULT 0,
-  `MailChestArmor` INT NOT NULL DEFAULT 0,
-  `PlateChestArmor` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `Charlevel` int NOT NULL DEFAULT '0',
+  `ShoulderBudget` int NOT NULL DEFAULT '0',
+  `TrinketBudget` int NOT NULL DEFAULT '0',
+  `WeaponBudget1H` int NOT NULL DEFAULT '0',
+  `RangedBudget` int NOT NULL DEFAULT '0',
+  `ClothShoulderArmor` int NOT NULL DEFAULT '0',
+  `LeatherShoulderArmor` int NOT NULL DEFAULT '0',
+  `MailShoulderArmor` int NOT NULL DEFAULT '0',
+  `PlateShoulderArmor` int NOT NULL DEFAULT '0',
+  `WeaponDPS1H` int NOT NULL DEFAULT '0',
+  `WeaponDPS2H` int NOT NULL DEFAULT '0',
+  `SpellcasterDPS1H` int NOT NULL DEFAULT '0',
+  `SpellcasterDPS2H` int NOT NULL DEFAULT '0',
+  `RangedDPS` int NOT NULL DEFAULT '0',
+  `WandDPS` int NOT NULL DEFAULT '0',
+  `SpellPower` int NOT NULL DEFAULT '0',
+  `PrimaryBudget` int NOT NULL DEFAULT '0',
+  `TertiaryBudget` int NOT NULL DEFAULT '0',
+  `ClothCloakArmor` int NOT NULL DEFAULT '0',
+  `ClothChestArmor` int NOT NULL DEFAULT '0',
+  `LeatherChestArmor` int NOT NULL DEFAULT '0',
+  `MailChestArmor` int NOT NULL DEFAULT '0',
+  `PlateChestArmor` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.scalingstatvalues_dbc: 0 rows
+-- Dumpar data för tabell acore_world.scalingstatvalues_dbc: 0 rows
 DELETE FROM `scalingstatvalues_dbc`;
 /*!40000 ALTER TABLE `scalingstatvalues_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `scalingstatvalues_dbc` ENABLE KEYS */;

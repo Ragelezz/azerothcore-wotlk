@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,17 +12,17 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_characters.character_achievement_progress
+-- Dumpar struktur för tabell acore_characters.character_achievement_progress
 DROP TABLE IF EXISTS `character_achievement_progress`;
 CREATE TABLE IF NOT EXISTS `character_achievement_progress` (
-  `guid` INT unsigned NOT NULL,
-  `criteria` SMALLINT unsigned NOT NULL,
-  `counter` INT unsigned NOT NULL,
-  `date` INT unsigned NOT NULL DEFAULT 0,
+  `guid` int unsigned NOT NULL,
+  `criteria` smallint unsigned NOT NULL,
+  `counter` int unsigned NOT NULL,
+  `date` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`criteria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_characters.character_achievement_progress: ~0 rows (приблизительно)
+-- Dumpar data för tabell acore_characters.character_achievement_progress: ~0 rows (ungefär)
 DELETE FROM `character_achievement_progress`;
 /*!40000 ALTER TABLE `character_achievement_progress` DISABLE KEYS */;
 /*!40000 ALTER TABLE `character_achievement_progress` ENABLE KEYS */;

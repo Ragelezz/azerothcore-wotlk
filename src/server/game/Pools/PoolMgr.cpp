@@ -581,7 +581,7 @@ void PoolMgr::LoadFromDB()
         if (!result)
         {
             mPoolTemplate.clear();
-            LOG_INFO("server.loading", ">> Loaded 0 object pools. DB table `pool_template` is empty.");
+            LOG_WARN("server.loading", ">> Loaded 0 object pools. DB table `pool_template` is empty.");
             LOG_INFO("server.loading", " ");
             return;
         }
@@ -599,7 +599,7 @@ void PoolMgr::LoadFromDB()
             ++count;
         } while (result->NextRow());
 
-        LOG_INFO("server.loading", ">> Loaded {} objects pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("server.loading", ">> Loaded {} Objects Pools In {} ms", count, GetMSTimeDiffToNow(oldMSTime));
         LOG_INFO("server.loading", " ");
     }
 
@@ -614,7 +614,7 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server.loading", ">> Loaded 0 creatures in  pools. DB table `pool_creature` is empty.");
+            LOG_WARN("server.loading", ">> Loaded 0 creatures in  pools. DB table `pool_creature` is empty.");
             LOG_INFO("server.loading", " ");
         }
         else
@@ -656,14 +656,14 @@ void PoolMgr::LoadFromDB()
                 ++count;
             } while (result->NextRow());
 
-            LOG_INFO("server.loading", ">> Loaded {} creatures in pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", ">> Loaded {} Creatures In Pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", " ");
         }
     }
 
     // Gameobjects
 
-    LOG_INFO("server.loading", "Loading Gameobject Pooling Data...");
+    LOG_INFO("server.loading", "Loading Gameobjects Pooling Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -672,7 +672,7 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server.loading", ">> Loaded 0 gameobjects in  pools. DB table `pool_gameobject` is empty.");
+            LOG_WARN("server.loading", ">> Loaded 0 gameobjects in  pools. DB table `pool_gameobject` is empty.");
             LOG_INFO("server.loading", " ");
         }
         else
@@ -726,7 +726,7 @@ void PoolMgr::LoadFromDB()
                 ++count;
             } while (result->NextRow());
 
-            LOG_INFO("server.loading", ">> Loaded {} gameobject in pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", ">> Loaded {} Gameobjects In Pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", " ");
         }
     }
@@ -742,7 +742,7 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server.loading", ">> Loaded 0 pools in pools");
+            LOG_WARN("server.loading", ">> Loaded 0 pools in pools");
             LOG_INFO("server.loading", " ");
         }
         else
@@ -818,7 +818,7 @@ void PoolMgr::LoadFromDB()
                 }
             }
 
-            LOG_INFO("server.loading", ">> Loaded {} pools in mother pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", ">> Loaded {} Pools In Mother Pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", " ");
         }
     }
@@ -832,7 +832,7 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server.loading", ">> Loaded 0 quests in pools");
+            LOG_WARN("server.loading", ">> Loaded 0 quests in pools");
             LOG_INFO("server.loading", " ");
         }
         else
@@ -908,13 +908,13 @@ void PoolMgr::LoadFromDB()
                 ++count;
             } while (result->NextRow());
 
-            LOG_INFO("server.loading", ">> Loaded {} quests in pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", ">> Loaded {} Quests In Pools in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", " ");
         }
     }
 
     // The initialize method will spawn all pools not in an event and not in another pool, this is why there is 2 left joins with 2 null checks
-    LOG_INFO("server.loading", "Starting objects pooling system...");
+    LOG_INFO("server.loading", "Starting Objects Pooling System...");
     {
         uint32 oldMSTime = getMSTime();
 

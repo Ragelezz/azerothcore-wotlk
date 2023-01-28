@@ -269,8 +269,8 @@ public:
                 if (creature)
                 {
                     creature->CastSpell(creature, SPELL_SPIRIT_AURA, true);
-                    creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    creature->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
+                    creature->RemoveUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
                     SpiritGUID[i] = creature->GetGUID();
                 }
             }
@@ -313,7 +313,7 @@ public:
                 case 3:
                 case 4:
                     me->NearTeleportTo(CENTER_X, CENTER_Y, CENTER_Z, me->GetOrientation());
-                    DoResetThreat();
+                    DoResetThreatList();
                     me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, 0);
                     me->RemoveAurasDueToSpell(Transform[Phase].unaura);
                     DoCast(me, Transform[Phase].spell);
@@ -336,7 +336,7 @@ public:
                             {
                                 Vortex->CastSpell(Vortex, SPELL_CYCLONE_PASSIVE, true);
                                 Vortex->CastSpell(Vortex, SPELL_CYCLONE_VISUAL, true);
-                                Vortex->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                                Vortex->SetUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
                                 Vortex->SetSpeed(MOVE_RUN, 1.0f);
                                 Vortex->AI()->AttackStart(SelectTarget(SelectTargetMethod::Random, 0));
                                 DoZoneInCombat(Vortex);

@@ -219,7 +219,7 @@ bool IsIPAddress(char const* ipaddress)
 uint32 CreatePIDFile(std::string const& filename)
 {
     FILE* pid_file = fopen(filename.c_str(), "w");
-    if (pid_file == nullptr)
+    if (!pid_file)
     {
         return 0;
     }
@@ -555,7 +555,7 @@ std::string Acore::Impl::ByteArrayToHexStr(uint8 const* bytes, size_t arrayLen, 
     for (int32 i = init; i != end; i += op)
     {
         char buffer[4];
-        sprintf(buffer, "%02X", bytes[i]);
+        snprintf(buffer, sizeof(buffer), "%02X", bytes[i]);
         ss << buffer;
     }
 

@@ -520,14 +520,17 @@ typedef std::pair<QuestRelations::const_iterator, QuestRelations::const_iterator
 
 struct PetLevelInfo
 {
-    PetLevelInfo() { for (unsigned short & stat : stats) stat = 0; }
+    PetLevelInfo()
+    {
+        stats.fill(0);
+    }
 
-    uint16 stats[MAX_STATS];
-    uint16 health{0};
-    uint16 mana{0};
+    std::array<uint32, MAX_STATS> stats = { };
+    uint32 health{0};
+    uint32 mana{0};
     uint32 armor{0};
-    uint16 min_dmg{0};
-    uint16 max_dmg{0};
+    uint32 min_dmg{0};
+    uint32 max_dmg{0};
 };
 
 struct MailLevelReward
@@ -667,6 +670,7 @@ typedef std::array<std::unordered_map<uint32, QuestGreeting>, 2> QuestGreetingCo
 
 typedef std::unordered_map<uint32, VendorItemData> CacheVendorItemContainer;
 typedef std::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellContainer;
+typedef std::unordered_map<uint32, ServerMail> ServerMailContainer;
 
 enum SkillRangeType
 {
@@ -836,9 +840,15 @@ public:
         return 0;
     }
 
-    [[nodiscard]] bool IsTavernAreaTrigger(uint32 Trigger_ID) const
+    [[nodiscard]] bool IsTavernAreaTrigger(uint32 triggerID, uint32 faction) const
     {
-        return _tavernAreaTriggerStore.find(Trigger_ID) != _tavernAreaTriggerStore.end();
+        auto itr = _tavernAreaTriggerStore.find(triggerID);
+        if (itr != _tavernAreaTriggerStore.end())
+        {
+            return (itr->second & faction) != 0;
+        }
+
+        return false;
     }
 
     [[nodiscard]] GossipText const* GetGossipText(uint32 Text_ID) const;
@@ -1040,6 +1050,7 @@ public:
     void LoadInstanceTemplate();
     void LoadInstanceEncounters();
     void LoadMailLevelRewards();
+    void LoadMailServerTemplates();
     void LoadVehicleTemplateAccessories();
     void LoadVehicleAccessories();
 
@@ -1169,6 +1180,8 @@ public:
         return nullptr;
     }
 
+    [[nodiscard]] ServerMailContainer const& GetAllServerMailStore() const { return _serverMailStore; }
+
     [[nodiscard]] BroadcastText const* GetBroadcastText(uint32 id) const
     {
         BroadcastTextContainer::const_iterator itr = _broadcastTextStore.find(id);
@@ -1250,7 +1263,21 @@ public:
     }
     [[nodiscard]] QuestGreetingLocale const* GetQuestGreetingLocale(TypeID type, uint32 id) const
     {
-        QuestGreetingLocaleContainer::const_iterator itr = _questGreetingLocaleStore.find(MAKE_PAIR32(type, id));
+        uint32 typeIndex;
+        if (type == TYPEID_UNIT)
+        {
+            typeIndex = 0;
+        }
+        else if (type == TYPEID_GAMEOBJECT)
+        {
+            typeIndex = 1;
+        }
+        else
+        {
+            return nullptr;
+        }
+
+        QuestGreetingLocaleContainer::const_iterator itr = _questGreetingLocaleStore.find(MAKE_PAIR32(typeIndex, id));
         if (itr == _questGreetingLocaleStore.end()) return nullptr;
         return &itr->second;
     }
@@ -1404,7 +1431,13 @@ public:
     [[nodiscard]] bool IsTransportMap(uint32 mapId) const { return _transportMaps.count(mapId) != 0; }
 
     [[nodiscard]] uint32 GetQuestMoneyReward(uint8 level, uint32 questMoneyDifficulty) const;
+    void SendServerMail(Player* player, uint32 id, uint32 reqLevel, uint32 reqPlayTime, uint32 rewardMoneyA, uint32 rewardMoneyH, uint32 rewardItemA, uint32 rewardItemCountA, uint32 rewardItemH, uint32 rewardItemCountH, std::string subject, std::string body, uint8 active) const;
 
+    void LoadInstanceSavedGameobjectStateData();
+    bool FindInstanceSavedGameobjectState(uint32 id, uint32 guid);
+    uint8 GetInstanceSavedGameobjectState(uint32 id, uint32 guid);
+    void SetInstanceSavedGameobjectState(uint32 id, uint32 guid, uint8 state);
+    void NewInstanceSavedGameobjectState(uint32 id, uint32 guid, uint8 state);
 private:
     // first free id for selected id type
     uint32 _auctionId; // pussywizard: accessed by a single thread
@@ -1435,7 +1468,7 @@ private:
 
     typedef std::unordered_map<uint32, GossipText> GossipTextContainer;
     typedef std::unordered_map<uint32, uint32> QuestAreaTriggerContainer;
-    typedef std::set<uint32> TavernAreaTriggerContainer;
+    typedef std::unordered_map<uint32, uint32> TavernAreaTriggerContainer;
 
     QuestAreaTriggerContainer _questAreaTriggerStore;
     TavernAreaTriggerContainer _tavernAreaTriggerStore;
@@ -1558,6 +1591,8 @@ private:
     CacheVendorItemContainer _cacheVendorItemStore;
     CacheTrainerSpellContainer _cacheTrainerSpellStore;
 
+    ServerMailContainer _serverMailStore;
+
     std::set<uint32> _difficultyEntries[MAX_DIFFICULTY - 1]; // already loaded difficulty 1 value in creatures, used in CheckCreatureTemplate
     std::set<uint32> _hasDifficultyEntries[MAX_DIFFICULTY - 1]; // already loaded creatures with difficulty 1 values, used in CheckCreatureTemplate
 
@@ -1572,6 +1607,14 @@ private:
     std::set<uint32> _transportMaps; // Helper container storing map ids that are for transports only, loaded from gameobject_template
 
     QuestMoneyRewardStore _questMoneyRewards;
+
+    struct GameobjectInstanceSavedState
+    {
+        uint32 m_instance;
+        uint32 m_guid;
+        unsigned short m_state;
+    };
+    std::vector<GameobjectInstanceSavedState> GameobjectInstanceSavedStateList;
 };
 
 #define sObjectMgr ObjectMgr::instance()

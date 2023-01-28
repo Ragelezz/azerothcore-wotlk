@@ -91,7 +91,7 @@ void CreatureTextMgr::LoadCreatureTexts()
 
     if (!result)
     {
-        LOG_INFO("server.loading", ">> Loaded 0 ceature texts. DB table `creature_texts` is empty.");
+        LOG_WARN("server.loading", ">> Loaded 0 ceature texts. DB table `creature_texts` is empty.");
         LOG_INFO("server.loading", " ");
         return;
     }
@@ -162,7 +162,7 @@ void CreatureTextMgr::LoadCreatureTexts()
         ++textCount;
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded {} creature texts for {} creatures in {} ms", textCount, mTextMap.size(), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded {} Creature Texts For {} Creatures in {} ms", textCount, mTextMap.size(), GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", " ");
 }
 

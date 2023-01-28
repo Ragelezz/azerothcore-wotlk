@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,20 +12,20 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.wmoareatable_dbc
+-- Dumpar struktur för tabell acore_world.wmoareatable_dbc
 DROP TABLE IF EXISTS `wmoareatable_dbc`;
 CREATE TABLE IF NOT EXISTS `wmoareatable_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `WMOID` INT NOT NULL DEFAULT 0,
-  `NameSetID` INT NOT NULL DEFAULT 0,
-  `WMOGroupID` INT NOT NULL DEFAULT 0,
-  `SoundProviderPref` INT NOT NULL DEFAULT 0,
-  `SoundProviderPrefUnderwater` INT NOT NULL DEFAULT 0,
-  `AmbienceID` INT NOT NULL DEFAULT 0,
-  `ZoneMusic` INT NOT NULL DEFAULT 0,
-  `IntroSound` INT NOT NULL DEFAULT 0,
-  `Flags` INT NOT NULL DEFAULT 0,
-  `AreaTableID` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `WMOID` int NOT NULL DEFAULT '0',
+  `NameSetID` int NOT NULL DEFAULT '0',
+  `WMOGroupID` int NOT NULL DEFAULT '0',
+  `SoundProviderPref` int NOT NULL DEFAULT '0',
+  `SoundProviderPrefUnderwater` int NOT NULL DEFAULT '0',
+  `AmbienceID` int NOT NULL DEFAULT '0',
+  `ZoneMusic` int NOT NULL DEFAULT '0',
+  `IntroSound` int NOT NULL DEFAULT '0',
+  `Flags` int NOT NULL DEFAULT '0',
+  `AreaTableID` int NOT NULL DEFAULT '0',
   `AreaName_Lang_enUS` varchar(100) DEFAULT NULL,
   `AreaName_Lang_enGB` varchar(100) DEFAULT NULL,
   `AreaName_Lang_koKR` varchar(100) DEFAULT NULL,
@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS `wmoareatable_dbc` (
   `AreaName_Lang_ptBR` varchar(100) DEFAULT NULL,
   `AreaName_Lang_itIT` varchar(100) DEFAULT NULL,
   `AreaName_Lang_Unk` varchar(100) DEFAULT NULL,
-  `AreaName_Lang_Mask` INT unsigned NOT NULL DEFAULT 0,
+  `AreaName_Lang_Mask` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.wmoareatable_dbc: 0 rows
+-- Dumpar data för tabell acore_world.wmoareatable_dbc: 0 rows
 DELETE FROM `wmoareatable_dbc`;
 /*!40000 ALTER TABLE `wmoareatable_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wmoareatable_dbc` ENABLE KEYS */;

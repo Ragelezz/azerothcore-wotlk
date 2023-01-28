@@ -244,7 +244,6 @@ void SpellMgr::LoadSpellInfoCorrections()
         48108,  // Hot Streak
         51124,  // Killing Machine
         54741,  // Firestarter
-        57761,  // Fireball!
         64823,  // Item - Druid T8 Balance 4P Bonus
         34477,  // Misdirection
         44401,  // Missile Barrage
@@ -252,6 +251,13 @@ void SpellMgr::LoadSpellInfoCorrections()
         }, [](SpellInfo* spellInfo)
     {
         spellInfo->ProcCharges = 1;
+    });
+
+    // Fireball
+    ApplySpellFix({ 57761 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcCharges = 1;
+        spellInfo->SpellPriority = 50;
     });
 
     // Tidal Wave
@@ -910,6 +916,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->SpellLevel = 0;
         spellInfo->BaseLevel = 0;
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
+        spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(5); // 40yd
     });
 
     // Earth Shield
@@ -1193,13 +1200,6 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER_AREA_PARTY);
     });
 
-    // Shadow Weaving
-    ApplySpellFix({ 15257, 15331, 15332 }, [](SpellInfo* spellInfo)
-    {
-        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
-        spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
-    });
-
     // Hymn of Hope
     ApplySpellFix({ 64904 }, [](SpellInfo* spellInfo)
     {
@@ -1361,6 +1361,12 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 49099 }, [](SpellInfo* spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 15000;
+    });
+
+    // Frightening Shout
+    ApplySpellFix({ 19134 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
     });
 
     // Isle of Conquest
@@ -3666,8 +3672,8 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_0].BasePoints = 0;
     });
 
-    // Krolmir, Hammer of Storms (13010)
-    ApplySpellFix({ 56606, 56541 }, [](SpellInfo* spellInfo)
+    // Riding Jokkum
+    ApplySpellFix({ 56606 }, [](SpellInfo* spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 1;
     });
@@ -4160,14 +4166,6 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(152); // 150 yards
     });
 
-    // Shadowbolt Volley
-    ApplySpellFix({ 22665 }, [](SpellInfo* spellInfo)
-    {
-        spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(152); // 150 yards
-        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(41); // 150 yards
-        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
-    });
-
     // Manastorm
     ApplySpellFix({ 21097 }, [](SpellInfo* spellInfo)
     {
@@ -4224,12 +4222,6 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx |= SPELL_ATTR1_EXCLUDE_CASTER;
     });
 
-    // Suppression Aura
-    ApplySpellFix({ 22247 }, [](SpellInfo* spellInfo)
-    {
-        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
-    });
-
     // Cosmetic - Lightning Beam Channel
     ApplySpellFix({ 45537 }, [](SpellInfo* spellInfo)
     {
@@ -4241,6 +4233,242 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 4374;
         spellInfo->Effects[EFFECT_0].DieSides = 1250;
+    });
+
+    // Explosion - Razorgore
+    ApplySpellFix({ 20038 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);
+        spellInfo->Attributes |= SPELL_ATTR0_NO_IMMUNITIES;
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
+    });
+
+    // Brood Power : Bronze
+    ApplySpellFix({ 22311 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_SUPRESS_CASTER_PROCS;
+    });
+
+    // Rapture
+    ApplySpellFix({ 63652, 63653, 63654, 63655 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_SUPRESS_TARGET_PROCS;
+    });
+
+    // Everlasting Affliction
+    ApplySpellFix({ 47422 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->SchoolMask = SPELL_SCHOOL_MASK_SHADOW;
+    });
+
+    // Flametongue Weapon (Passive) (Rank 6)
+    ApplySpellFix({ 16312 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
+    });
+
+    // Mana Tide Totem
+    // Cleansing Totem Effect
+    ApplySpellFix({ 39609, 52025 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(5); // 40yd
+    });
+
+    // Increased Totem Radius
+    ApplySpellFix({ 21895 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[0].SpellClassMask = flag96(0x0603E000, 0x00200100);
+    });
+
+    // Jokkum Summon
+    ApplySpellFix({ 56541 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValueB = 844;
+    });
+
+    // Hakkar Cause Insanity
+    ApplySpellFix({ 24327 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Dispel = DISPEL_NONE;
+    });
+
+    // Summon Nightmare Illusions
+    ApplySpellFix({ 24681, 24728, 24729 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValueB = 64;
+    });
+
+    // Blood Siphon
+    ApplySpellFix({ 24322, 24323 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_STUN;
+        spellInfo->Effects[EFFECT_2].Effect = 0;
+        spellInfo->Attributes |= SPELL_ATTR0_NO_AURA_CANCEL;
+        spellInfo->AttributesEx5 |= SPELL_ATTR5_ALLOW_ACTION_DURING_CHANNEL;
+        spellInfo->ChannelInterruptFlags &= ~AURA_INTERRUPT_FLAG_MOVE;
+    });
+
+    // Place Fake Fur
+    ApplySpellFix({ 46085 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValue = 8;
+    });
+
+    // Smash Mammoth Trap
+    ApplySpellFix({ 46201 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValue = 8;
+    });
+
+    // Elemental Mastery
+    ApplySpellFix({ 16166 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x00000003, 0x00001000);
+    });
+
+    // Elemental Vulnerability
+    ApplySpellFix({ 28772 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Speed = 1;
+    });
+
+    // Find the Ancient Hero: Kill Credit
+    ApplySpellFix({ 25729 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = TARGET_UNIT_SUMMONER;
+    });
+
+    // Artorius Demonic Doom
+    ApplySpellFix({ 23298 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx4 |= SPELL_ATTR4_IGNORE_DAMAGE_TAKEN_MODIFIERS;
+        spellInfo->AttributesEx6 |= SPELL_ATTR6_IGNORE_CASTER_DAMAGE_MODIFIERS;
+    });
+
+    // Lash
+    ApplySpellFix({ 25852 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].Effect = 0;
+    });
+
+    // Explosion
+    ApplySpellFix({ 5255 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_ALWAYS_HIT;
+    });
+
+    // Death's Respite
+    ApplySpellFix({ 67731, 68305 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_SUPRESS_TARGET_PROCS;
+    });
+
+    // Wyvern Sting DoT
+    ApplySpellFix({ 24131, 24134, 24135 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
+    });
+
+     // Feed Pet
+    ApplySpellFix({ 1539, 51284 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Attributes |= SPELL_ATTR0_ALLOW_WHILE_SITTING;
+    });
+
+    // Judgement (Paladin T2 8P Bonus)
+    ApplySpellFix({ 23591 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcFlags = PROC_FLAG_DONE_SPELL_MELEE_DMG_CLASS;
+    });
+
+    // Gift of Arthas
+    ApplySpellFix({ 11371 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->SpellFamilyName = SPELLFAMILY_POTION;
+    });
+
+    // Refocus (Renataki's charm of beasts)
+    ApplySpellFix({ 24531 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+    });
+
+    // Collect Rookery Egg
+    ApplySpellFix({ 15958 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].Effect = 0;
+    });
+
+    // WotLK Prologue Frozen Shade Visual, temp used to restore visual after Dispersion
+    ApplySpellFix({ 53444 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(27);
+    });
+
+    // Rental Racing Ram
+    ApplySpellFix({ 43883 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AuraInterruptFlags &= ~AURA_INTERRUPT_FLAG_NOT_ABOVEWATER;
+    });
+
+    // Summon Worm
+    ApplySpellFix({ 518, 25831, 25832 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValueB = 64;
+    });
+
+    // Uppercut
+    ApplySpellFix({ 26007 }, [](SpellInfo* spellInfo)
+    {
+            spellInfo->AttributesEx3 |= SPELL_ATTR3_SUPRESS_CASTER_PROCS;
+    });
+
+    // Digestive Acid (Temporary)
+    ApplySpellFix({ 26476 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Attributes |= SPELL_ATTR0_NO_IMMUNITIES;
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_IGNORE_LINE_OF_SIGHT;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_ALWAYS_HIT;
+    });
+
+    // Drums of War/Battle/Speed/Restoration
+    ApplySpellFix({ 35475, 35476, 35477, 35478 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ExcludeTargetAuraSpell = 51120;
+    });
+
+    // Slap!
+    ApplySpellFix({ 6754 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_SUPRESS_TARGET_PROCS;
+    });
+
+    // Summon Cauldron Stuff
+    ApplySpellFix({ 36549 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(28); // 5 seconds
+        spellInfo->Effects[EFFECT_0].TargetB = TARGET_DEST_CASTER;
+    });
+
+    // Hunter's Mark
+    ApplySpellFix({ 31615 }, [](SpellInfo* spellInfo)
+    {
+        for (uint8 index = EFFECT_0; index <= EFFECT_1; ++index)
+        {
+            spellInfo->Effects[index].TargetA = TARGET_UNIT_TARGET_ENEMY;
+            spellInfo->Effects[index].TargetB = 0;
+        }
+    });
+
+    // Self Visual - Sleep Until Cancelled(DND)
+    ApplySpellFix({ 14915 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AuraInterruptFlags &= ~AURA_INTERRUPT_FLAG_NOT_SEATED;
     });
 
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)

@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,30 +12,30 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.worldmapoverlay_dbc
+-- Dumpar struktur för tabell acore_world.worldmapoverlay_dbc
 DROP TABLE IF EXISTS `worldmapoverlay_dbc`;
 CREATE TABLE IF NOT EXISTS `worldmapoverlay_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `MapAreaID` INT NOT NULL DEFAULT 0,
-  `AreaID_1` INT NOT NULL DEFAULT 0,
-  `AreaID_2` INT NOT NULL DEFAULT 0,
-  `AreaID_3` INT NOT NULL DEFAULT 0,
-  `AreaID_4` INT NOT NULL DEFAULT 0,
-  `MapPointX` INT NOT NULL DEFAULT 0,
-  `MapPointY` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `MapAreaID` int NOT NULL DEFAULT '0',
+  `AreaID_1` int NOT NULL DEFAULT '0',
+  `AreaID_2` int NOT NULL DEFAULT '0',
+  `AreaID_3` int NOT NULL DEFAULT '0',
+  `AreaID_4` int NOT NULL DEFAULT '0',
+  `MapPointX` int NOT NULL DEFAULT '0',
+  `MapPointY` int NOT NULL DEFAULT '0',
   `TextureName` varchar(100) DEFAULT NULL,
-  `TextureWidth` INT NOT NULL DEFAULT 0,
-  `TextureHeight` INT NOT NULL DEFAULT 0,
-  `OffsetX` INT NOT NULL DEFAULT 0,
-  `OffsetY` INT NOT NULL DEFAULT 0,
-  `HitRectTop` INT NOT NULL DEFAULT 0,
-  `HitRectLeft` INT NOT NULL DEFAULT 0,
-  `HitRectBottom` INT NOT NULL DEFAULT 0,
-  `HitRectRight` INT NOT NULL DEFAULT 0,
+  `TextureWidth` int NOT NULL DEFAULT '0',
+  `TextureHeight` int NOT NULL DEFAULT '0',
+  `OffsetX` int NOT NULL DEFAULT '0',
+  `OffsetY` int NOT NULL DEFAULT '0',
+  `HitRectTop` int NOT NULL DEFAULT '0',
+  `HitRectLeft` int NOT NULL DEFAULT '0',
+  `HitRectBottom` int NOT NULL DEFAULT '0',
+  `HitRectRight` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.worldmapoverlay_dbc: 0 rows
+-- Dumpar data för tabell acore_world.worldmapoverlay_dbc: 0 rows
 DELETE FROM `worldmapoverlay_dbc`;
 /*!40000 ALTER TABLE `worldmapoverlay_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `worldmapoverlay_dbc` ENABLE KEYS */;

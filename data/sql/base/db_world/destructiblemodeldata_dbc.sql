@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,32 +12,32 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.destructiblemodeldata_dbc
+-- Dumpar struktur för tabell acore_world.destructiblemodeldata_dbc
 DROP TABLE IF EXISTS `destructiblemodeldata_dbc`;
 CREATE TABLE IF NOT EXISTS `destructiblemodeldata_dbc` (
-  `ID` INT NOT NULL DEFAULT 0,
-  `State0Wmo` INT NOT NULL DEFAULT 0,
-  `State0DestructionDoodadSet` INT NOT NULL DEFAULT 0,
-  `State0ImpactEffectDoodadSet` INT NOT NULL DEFAULT 0,
-  `State0AmbientDoodadSet` INT NOT NULL DEFAULT 0,
-  `State1Wmo` INT NOT NULL DEFAULT 0,
-  `State1DestructionDoodadSet` INT NOT NULL DEFAULT 0,
-  `State1ImpactEffectDoodadSet` INT NOT NULL DEFAULT 0,
-  `State1AmbientDoodadSet` INT NOT NULL DEFAULT 0,
-  `State2Wmo` INT NOT NULL DEFAULT 0,
-  `State2DestructionDoodadSet` INT NOT NULL DEFAULT 0,
-  `State2ImpactEffectDoodadSet` INT NOT NULL DEFAULT 0,
-  `State2AmbientDoodadSet` INT NOT NULL DEFAULT 0,
-  `State3Wmo` INT NOT NULL DEFAULT 0,
-  `State3DestructionDoodadSet` INT NOT NULL DEFAULT 0,
-  `State3ImpactEffectDoodadSet` INT NOT NULL DEFAULT 0,
-  `State3AmbientDoodadSet` INT NOT NULL DEFAULT 0,
-  `Field17` INT NOT NULL DEFAULT 0,
-  `Field18` INT NOT NULL DEFAULT 0,
+  `ID` int NOT NULL DEFAULT '0',
+  `State0Wmo` int NOT NULL DEFAULT '0',
+  `State0DestructionDoodadSet` int NOT NULL DEFAULT '0',
+  `State0ImpactEffectDoodadSet` int NOT NULL DEFAULT '0',
+  `State0AmbientDoodadSet` int NOT NULL DEFAULT '0',
+  `State1Wmo` int NOT NULL DEFAULT '0',
+  `State1DestructionDoodadSet` int NOT NULL DEFAULT '0',
+  `State1ImpactEffectDoodadSet` int NOT NULL DEFAULT '0',
+  `State1AmbientDoodadSet` int NOT NULL DEFAULT '0',
+  `State2Wmo` int NOT NULL DEFAULT '0',
+  `State2DestructionDoodadSet` int NOT NULL DEFAULT '0',
+  `State2ImpactEffectDoodadSet` int NOT NULL DEFAULT '0',
+  `State2AmbientDoodadSet` int NOT NULL DEFAULT '0',
+  `State3Wmo` int NOT NULL DEFAULT '0',
+  `State3DestructionDoodadSet` int NOT NULL DEFAULT '0',
+  `State3ImpactEffectDoodadSet` int NOT NULL DEFAULT '0',
+  `State3AmbientDoodadSet` int NOT NULL DEFAULT '0',
+  `Field17` int NOT NULL DEFAULT '0',
+  `Field18` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.destructiblemodeldata_dbc: 0 rows
+-- Dumpar data för tabell acore_world.destructiblemodeldata_dbc: 0 rows
 DELETE FROM `destructiblemodeldata_dbc`;
 /*!40000 ALTER TABLE `destructiblemodeldata_dbc` DISABLE KEYS */;
 /*!40000 ALTER TABLE `destructiblemodeldata_dbc` ENABLE KEYS */;

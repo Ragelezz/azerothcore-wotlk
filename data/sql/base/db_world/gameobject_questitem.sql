@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,17 +12,17 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.gameobject_questitem
+-- Dumpar struktur för tabell acore_world.gameobject_questitem
 DROP TABLE IF EXISTS `gameobject_questitem`;
 CREATE TABLE IF NOT EXISTS `gameobject_questitem` (
-  `GameObjectEntry` INT unsigned NOT NULL DEFAULT 0,
-  `Idx` INT unsigned NOT NULL DEFAULT 0,
-  `ItemId` INT unsigned NOT NULL DEFAULT 0,
-  `VerifiedBuild` SMALLINT NOT NULL DEFAULT 0,
+  `GameObjectEntry` int unsigned NOT NULL DEFAULT '0',
+  `Idx` int unsigned NOT NULL DEFAULT '0',
+  `ItemId` int unsigned NOT NULL DEFAULT '0',
+  `VerifiedBuild` smallint NOT NULL DEFAULT '0',
   PRIMARY KEY (`GameObjectEntry`,`Idx`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.gameobject_questitem: 862 rows
+-- Dumpar data för tabell acore_world.gameobject_questitem: 862 rows
 DELETE FROM `gameobject_questitem`;
 /*!40000 ALTER TABLE `gameobject_questitem` DISABLE KEYS */;
 INSERT INTO `gameobject_questitem` (`GameObjectEntry`, `Idx`, `ItemId`, `VerifiedBuild`) VALUES

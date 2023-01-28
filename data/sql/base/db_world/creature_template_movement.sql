@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,21 +12,21 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.creature_template_movement
+-- Dumpar struktur för tabell acore_world.creature_template_movement
 DROP TABLE IF EXISTS `creature_template_movement`;
 CREATE TABLE IF NOT EXISTS `creature_template_movement` (
-  `CreatureId` INT unsigned NOT NULL DEFAULT 0,
-  `Ground` TINYINT unsigned DEFAULT NULL,
-  `Swim` TINYINT unsigned DEFAULT NULL,
-  `Flight` TINYINT unsigned DEFAULT NULL,
-  `Rooted` TINYINT unsigned DEFAULT NULL,
-  `Chase` TINYINT unsigned DEFAULT NULL,
-  `Random` TINYINT unsigned DEFAULT NULL,
-  `InteractionPauseTimer` INT unsigned DEFAULT NULL COMMENT 'Time (in milliseconds) during which creature will not move after interaction with player',
+  `CreatureId` int unsigned NOT NULL DEFAULT '0',
+  `Ground` tinyint unsigned DEFAULT NULL,
+  `Swim` tinyint unsigned DEFAULT NULL,
+  `Flight` tinyint unsigned DEFAULT NULL,
+  `Rooted` tinyint unsigned DEFAULT NULL,
+  `Chase` tinyint unsigned DEFAULT NULL,
+  `Random` tinyint unsigned DEFAULT NULL,
+  `InteractionPauseTimer` int unsigned DEFAULT NULL COMMENT 'Time (in milliseconds) during which creature will not move after interaction with player',
   PRIMARY KEY (`CreatureId`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.creature_template_movement: 4 402 rows
+-- Dumpar data för tabell acore_world.creature_template_movement: 4 412 rows
 DELETE FROM `creature_template_movement`;
 /*!40000 ALTER TABLE `creature_template_movement` DISABLE KEYS */;
 INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Flight`, `Rooted`, `Chase`, `Random`, `InteractionPauseTimer`) VALUES
@@ -198,7 +198,7 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(16922, 0, 0, 1, 0, 0, 0, NULL),
 	(17974, 0, 0, 1, 0, 0, 0, NULL),
 	(16898, 0, 0, 1, 0, 0, 0, NULL),
-	(11583, 1, 1, 1, 0, 0, 0, NULL),
+	(11583, 1, 1, 2, 0, 0, 0, NULL),
 	(19393, 0, 0, 1, 0, 0, 0, NULL),
 	(19303, 0, 0, 1, 0, 0, 0, NULL),
 	(18793, 0, 1, 1, 0, 0, 0, NULL),
@@ -286,7 +286,7 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(25219, 0, 0, 1, 0, 0, 0, NULL),
 	(28713, 0, 0, 1, 0, 0, 0, NULL),
 	(29055, 0, 0, 1, 0, 0, 0, NULL),
-	(2830, 0, 0, 1, 0, 0, 0, NULL),
+	(2830, 2, 0, 1, 0, 0, 0, NULL),
 	(28947, 0, 0, 1, 0, 0, 0, NULL),
 	(2852, 0, 1, 1, 0, 0, 0, NULL),
 	(28669, 0, 0, 1, 0, 0, 0, NULL),
@@ -477,7 +477,7 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(27445, 0, 0, 1, 0, 0, 0, NULL),
 	(27429, 0, 0, 1, 0, 0, 0, NULL),
 	(27366, 0, 0, 1, 0, 0, 0, NULL),
-	(27292, 0, 0, 1, 0, 0, 0, NULL),
+	(27292, 0, 0, 0, 0, 0, 0, NULL),
 	(26736, 0, 1, 1, 0, 0, 0, NULL),
 	(27688, 0, 0, 1, 0, 0, 0, NULL),
 	(27542, 0, 1, 1, 0, 0, 0, NULL),
@@ -2620,7 +2620,7 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(10086, 1, 1, 0, 0, 0, 0, NULL),
 	(10182, 1, 1, 0, 0, 0, 0, NULL),
 	(10183, 1, 0, 0, 0, 0, 0, NULL),
-	(10184, 1, 0, 0, 0, 0, 0, NULL),
+	(10184, 1, 0, 1, 0, 0, 0, NULL),
 	(10197, 1, 1, 0, 0, 0, 0, NULL),
 	(10198, 1, 0, 0, 0, 0, 0, NULL),
 	(10199, 1, 1, 0, 0, 0, 0, NULL),
@@ -4294,7 +4294,7 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(30789, 1, 1, 0, 0, 0, 0, NULL),
 	(25555, 1, 1, 0, 0, 0, 0, NULL),
 	(20306, 1, 1, 0, 0, 0, 0, NULL),
-	(36538, 1, 0, 0, 0, 0, 0, NULL),
+	(36538, 1, 0, 1, 0, 0, 0, NULL),
 	(23771, 1, 1, 0, 1, 0, 0, NULL),
 	(25541, 1, 1, 0, 0, 0, 0, NULL),
 	(26678, 1, 0, 0, 1, 0, 0, NULL),
@@ -4431,7 +4431,17 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 	(578, 1, 1, 0, 0, 0, 0, NULL),
 	(1083, 1, 1, 0, 0, 0, 0, NULL),
 	(545, 1, 1, 0, 0, 0, 0, NULL),
-	(3917, 1, 1, 0, 0, 0, 0, 0);
+	(3917, 1, 1, 0, 0, 0, 0, 0),
+	(19152, 1, 0, 1, 1, 0, 0, NULL),
+	(15241, 1, 0, 1, 1, 0, 0, NULL),
+	(15242, 1, 0, 1, 0, 0, 0, NULL),
+	(18707, 1, 0, 1, 0, 0, 0, NULL),
+	(22441, 1, 0, 1, 0, 0, 0, NULL),
+	(8276, 1, 0, 1, 0, 0, 0, NULL),
+	(15514, 1, 1, 0, 1, 0, 0, NULL),
+	(15802, 1, 0, 0, 1, 0, 0, 0),
+	(15546, 1, 0, 1, NULL, 0, 0, NULL),
+	(15369, 1, 0, 1, NULL, 0, 0, NULL);
 /*!40000 ALTER TABLE `creature_template_movement` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

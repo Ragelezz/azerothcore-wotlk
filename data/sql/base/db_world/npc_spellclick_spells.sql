@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.6.4-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
--- HeidiSQL Версия:              11.3.0.6295
+-- Värd:                         127.0.0.1
+-- Serverversion:                8.0.28 - MySQL Community Server - GPL
+-- Server-OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,17 +12,17 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица acore_world.npc_spellclick_spells
+-- Dumpar struktur för tabell acore_world.npc_spellclick_spells
 DROP TABLE IF EXISTS `npc_spellclick_spells`;
 CREATE TABLE IF NOT EXISTS `npc_spellclick_spells` (
-  `npc_entry` INT unsigned NOT NULL COMMENT 'reference to creature_template',
-  `spell_id` INT unsigned NOT NULL COMMENT 'spell which should be casted ',
-  `cast_flags` TINYINT unsigned NOT NULL COMMENT 'first bit defines caster: 1=player, 0=creature; second bit defines target, same mapping as caster bit',
-  `user_type` SMALLINT unsigned NOT NULL DEFAULT 0 COMMENT 'relation with summoner: 0-no 1-friendly 2-raid 3-party player can click',
+  `npc_entry` int unsigned NOT NULL COMMENT 'reference to creature_template',
+  `spell_id` int unsigned NOT NULL COMMENT 'spell which should be casted ',
+  `cast_flags` tinyint unsigned NOT NULL COMMENT 'first bit defines caster: 1=player, 0=creature; second bit defines target, same mapping as caster bit',
+  `user_type` smallint unsigned NOT NULL DEFAULT '0' COMMENT 'relation with summoner: 0-no 1-friendly 2-raid 3-party player can click',
   PRIMARY KEY (`npc_entry`,`spell_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
--- Дамп данных таблицы acore_world.npc_spellclick_spells: 333 rows
+-- Dumpar data för tabell acore_world.npc_spellclick_spells: 330 rows
 DELETE FROM `npc_spellclick_spells`;
 /*!40000 ALTER TABLE `npc_spellclick_spells` DISABLE KEYS */;
 INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `user_type`) VALUES
@@ -107,7 +107,6 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `use
 	(29005, 60944, 1, 0),
 	(29351, 46598, 0, 0),
 	(29358, 46598, 0, 0),
-	(29403, 49641, 1, 0),
 	(29433, 47020, 1, 0),
 	(29460, 54513, 1, 0),
 	(29488, 54568, 3, 0),
@@ -266,9 +265,7 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `use
 	(33845, 63151, 1, 0),
 	(33870, 63663, 1, 0),
 	(34045, 65030, 1, 0),
-	(34072, 63989, 2, 0),
-	(34072, 63997, 2, 0),
-	(34072, 63998, 2, 0),
+	(34072, 51347, 3, 0),
 	(34106, 67830, 1, 1),
 	(34108, 67830, 1, 1),
 	(34109, 67830, 1, 1),

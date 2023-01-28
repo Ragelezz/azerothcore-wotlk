@@ -19,7 +19,7 @@
 #define ACORE_SHAREDDEFINES_H
 
 #include "Define.h"
-#include "DetourNavMesh.h"
+#include "EnumFlag.h"
 #include <cassert>
 
 float const GROUND_HEIGHT_TOLERANCE = 0.05f; // Extra tolerance to z position to check if it is in air or on ground.
@@ -536,7 +536,7 @@ enum SpellAttr4 : uint32
 // EnumUtils: DESCRIBE THIS
 enum SpellAttr5 : uint32
 {
-    SPELL_ATTR5_ALLOW_ACTION_DURING_CHANNEL                    = 0x00000001, // TITLE Can be channeled while moving
+    SPELL_ATTR5_ALLOW_ACTION_DURING_CHANNEL                    = 0x00000001, // TITLE Can be channeled while moving/casting
     SPELL_ATTR5_NO_REAGENT_COST_WITH_AURA                      = 0x00000002, // TITLE No reagents during arena preparation
     SPELL_ATTR5_REMOVE_ENTERING_ARENA                          = 0x00000004, // TITLE Remove when entering arena DESCRIPTION Force this aura to be removed on entering arena, regardless of other properties
     SPELL_ATTR5_ALLOW_WHILE_STUNNED                            = 0x00000008, // TITLE Usable while stunned
@@ -1504,12 +1504,12 @@ enum SpellMissInfo
 
 enum SpellHitType
 {
-    SPELL_HIT_TYPE_UNK1 = 0x00001,
-    SPELL_HIT_TYPE_CRIT = 0x00002,
-    SPELL_HIT_TYPE_UNK3 = 0x00004,
-    SPELL_HIT_TYPE_UNK4 = 0x00008,
-    SPELL_HIT_TYPE_UNK5 = 0x00010,                          // replace caster?
-    SPELL_HIT_TYPE_UNK6 = 0x00020
+    SPELL_HIT_TYPE_CRIT_DEBUG           = 0x01,
+    SPELL_HIT_TYPE_CRIT                 = 0x02,
+    SPELL_HIT_TYPE_HIT_DEBUG            = 0x04,
+    SPELL_HIT_TYPE_SPLIT                = 0x08,
+    SPELL_HIT_TYPE_VICTIM_IS_ATTACKER   = 0x10,
+    SPELL_HIT_TYPE_ATTACK_TABLE_DEBUG   = 0x20
 };
 
 enum SpellDmgClass
@@ -1570,7 +1570,7 @@ enum GameobjectTypes
 #define MAX_GAMEOBJECT_TYPE                  36             // sending to client this or greater value can crash client.
 #define MAX_GAMEOBJECT_DATA                  24             // Max number of uint32 vars in gameobject_template data field
 
-enum GameObjectFlags
+enum GameObjectFlags : uint32
 {
     GO_FLAG_IN_USE          = 0x00000001,                   // disables interaction while animated
     GO_FLAG_LOCKED          = 0x00000002,                   // require key, spell, event, etc to be opened. Makes "Locked" appear in tooltip
@@ -1582,6 +1582,8 @@ enum GameObjectFlags
     GO_FLAG_DAMAGED         = 0x00000200,
     GO_FLAG_DESTROYED       = 0x00000400,
 };
+
+DEFINE_ENUM_FLAG(GameObjectFlags);
 
 enum GameObjectDynamicLowFlags
 {
@@ -3279,6 +3281,11 @@ enum SummonType
 enum EventId
 {
     EVENT_CHARGE            = 1003,
+
+    /// Special charge event which is used for charge spells that have explicit targets
+    /// and had a path already generated - using it in PointMovementGenerator will not
+    /// create a new spline and launch it
+    EVENT_CHARGE_PREPATH    = 1005,
 };
 
 enum ResponseCodes
@@ -3411,12 +3418,32 @@ uint8 constexpr PVP_TEAMS_COUNT = 2;
 
 inline PvPTeamId GetPvPTeamId(TeamId teamId)
 {
-    return teamId == TEAM_ALLIANCE ? PVP_TEAM_ALLIANCE : PVP_TEAM_HORDE;
+    if (teamId == TEAM_ALLIANCE)
+    {
+        return PVP_TEAM_ALLIANCE;
+    }
+
+    if (teamId == TEAM_HORDE)
+    {
+        return PVP_TEAM_HORDE;
+    }
+
+    return PVP_TEAM_NEUTRAL;
 }
 
 inline TeamId GetTeamId(PvPTeamId teamId)
 {
-    return teamId == PVP_TEAM_ALLIANCE ? TEAM_ALLIANCE : TEAM_HORDE;
+    if (teamId == PVP_TEAM_ALLIANCE)
+    {
+        return TEAM_ALLIANCE;
+    }
+
+    if (teamId == PVP_TEAM_HORDE)
+    {
+        return TEAM_HORDE;
+    }
+
+    return TEAM_NEUTRAL;
 }
 
 // indexes of BattlemasterList.dbc
